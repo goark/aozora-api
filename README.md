@@ -77,58 +77,58 @@ ranking, err := aozora.DefaultClient().Ranking(tm)
 ```
 //Book is entity class of book info.
 type Book struct {
-	BookID                      int    `json:"book_id"`
-	Title                       string `json:"title"`
-	TitleYomi                   string `json:"title_yomi"`
-	TitleSort                   string `json:"title_sort"`
-	Subtitle                    string `json:"subtitle"`
-	SubtitleYomi                string `json:"subtitle_yomi"`
-	OriginalTitle               string `json:"original_title"`
-	FirstAppearance             string `json:"first_appearance"`
-	NDCCode                     string `json:"ndc_code"`
-	FontKanaType                string `json:"font_kana_type"`
-	Copyright                   bool   `json:"copyright"`
-	ReleaseDate                 Date   `json:"release_date"`
-	LastModified                Date   `json:"last_modified"`
-	CardURL                     string `json:"card_url"`
-	BaseBook1                   string `json:"base_book_1"`
-	BaseBookPublisher1          string `json:"base_book_1_publisher"`
-	BaseBookFirstEdition1       string `json:"base_book_1_1st_edition"`
-	BaseBookEditionInput1       string `json:"base_book_1_edition_input"`
-	BaseBookEditionProofing1    string `json:"base_book_1_edition_proofing"`
-	BaseBookParent1             string `json:"base_book_1_parent"`
-	BaseBookParentPublisher1    string `json:"base_book_1_parent_publisher"`
-	BaseBookParentFirstEdition1 string `json:"base_book_1_parent_1st_edition"`
-	BaseBook2                   string `json:"base_book_2"`
-	BaseBookPublisher2          string `json:"base_book_2_publisher"`
-	BaseBookFirstEdition2       string `json:"base_book_2_1st_edition"`
-	BaseBookEditionInput2       string `json:"base_book_2_edition_input"`
-	BaseBookEditionProofing2    string `json:"base_book_2_edition_proofing"`
-	BaseBookParent2             string `json:"base_book_2_parent"`
-	BaseBookParentPublisher2    string `json:"base_book_2_parent_publisher"`
-	BaseBookParentFirstEdition2 string `json:"base_book_2_parent_1st_edition"`
-	Input                       string `json:"input"`
-	Proofing                    string `json:"proofing"`
-	TextURL                     string `json:"text_url"`
-	TextLastModified            Date   `json:"text_last_modified"`
-	TextEncoding                string `json:"text_encoding"`
-	TextCharset                 string `json:"text_charset"`
-	TextUpdated                 int    `json:"text_updated"`
-	HTMLURL                     string `json:"html_url"`
-	HTMLLastModified            Date   `json:"html_last_modified"`
-	HTMLEncoding                string `json:"html_encoding"`
-	HTMLCharset                 string `json:"html_charset"`
-	HTMLUpdated                 int    `json:"html_updated"`
-	Translators                 []struct {
-		PersonID  int    `json:"person_id"`
-		LastName  string `json:"last_name"`
-		FirstName string `json:"first_name"`
-	} `json:"translators"`
-	Authors []struct {
-		PersonID  int    `json:"person_id"`
-		LastName  string `json:"last_name"`
-		FirstName string `json:"first_name"`
-	} `json:"authors"`
+    BookID                      int    `json:"book_id"`
+    Title                       string `json:"title"`
+    TitleYomi                   string `json:"title_yomi"`
+    TitleSort                   string `json:"title_sort"`
+    Subtitle                    string `json:"subtitle"`
+    SubtitleYomi                string `json:"subtitle_yomi"`
+    OriginalTitle               string `json:"original_title"`
+    FirstAppearance             string `json:"first_appearance"`
+    NDCCode                     string `json:"ndc_code"`
+    FontKanaType                string `json:"font_kana_type"`
+    Copyright                   bool   `json:"copyright"`
+    ReleaseDate                 Date   `json:"release_date"`
+    LastModified                Date   `json:"last_modified"`
+    CardURL                     string `json:"card_url"`
+    BaseBook1                   string `json:"base_book_1"`
+    BaseBookPublisher1          string `json:"base_book_1_publisher"`
+    BaseBookFirstEdition1       string `json:"base_book_1_1st_edition"`
+    BaseBookEditionInput1       string `json:"base_book_1_edition_input"`
+    BaseBookEditionProofing1    string `json:"base_book_1_edition_proofing"`
+    BaseBookParent1             string `json:"base_book_1_parent"`
+    BaseBookParentPublisher1    string `json:"base_book_1_parent_publisher"`
+    BaseBookParentFirstEdition1 string `json:"base_book_1_parent_1st_edition"`
+    BaseBook2                   string `json:"base_book_2"`
+    BaseBookPublisher2          string `json:"base_book_2_publisher"`
+    BaseBookFirstEdition2       string `json:"base_book_2_1st_edition"`
+    BaseBookEditionInput2       string `json:"base_book_2_edition_input"`
+    BaseBookEditionProofing2    string `json:"base_book_2_edition_proofing"`
+    BaseBookParent2             string `json:"base_book_2_parent"`
+    BaseBookParentPublisher2    string `json:"base_book_2_parent_publisher"`
+    BaseBookParentFirstEdition2 string `json:"base_book_2_parent_1st_edition"`
+    Input                       string `json:"input"`
+    Proofing                    string `json:"proofing"`
+    TextURL                     string `json:"text_url"`
+    TextLastModified            Date   `json:"text_last_modified"`
+    TextEncoding                string `json:"text_encoding"`
+    TextCharset                 string `json:"text_charset"`
+    TextUpdated                 int    `json:"text_updated"`
+    HTMLURL                     string `json:"html_url"`
+    HTMLLastModified            Date   `json:"html_last_modified"`
+    HTMLEncoding                string `json:"html_encoding"`
+    HTMLCharset                 string `json:"html_charset"`
+    HTMLUpdated                 int    `json:"html_updated"`
+    Translators                 []struct {
+        PersonID  int    `json:"person_id"`
+        LastName  string `json:"last_name"`
+        FirstName string `json:"first_name"`
+    } `json:"translators"`
+    Authors []struct {
+        PersonID  int    `json:"person_id"`
+        LastName  string `json:"last_name"`
+        FirstName string `json:"first_name"`
+    } `json:"authors"`
 }
 ```
 
@@ -137,18 +137,18 @@ type Book struct {
 ```
 //Person is entity class of person info.
 type Person struct {
-	PersonID        int    `json:"person_id"`
-	LastName        string `json:"last_name"`
-	FirstName       string `json:"first_name"`
-	LastNameYomi    string `json:"last_name_yomi"`
-	FirstNameYomi   string `json:"first_name_yomi"`
-	LastNameSort    string `json:"last_name_sort"`
-	FirstNameSort   string `json:"first_name_sort"`
-	LastNameRoman   string `json:"last_name_roman"`
-	FirstNameRoman  string `json:"first_name_roman"`
-	DateOfBirth     Date   `json:"date_of_birth"`
-	DateOfDeath     Date   `json:"date_of_death"`
-	AuthorCopyright bool   `json:"author_copyright"`
+    PersonID        int    `json:"person_id"`
+    LastName        string `json:"last_name"`
+    FirstName       string `json:"first_name"`
+    LastNameYomi    string `json:"last_name_yomi"`
+    FirstNameYomi   string `json:"first_name_yomi"`
+    LastNameSort    string `json:"last_name_sort"`
+    FirstNameSort   string `json:"first_name_sort"`
+    LastNameRoman   string `json:"last_name_roman"`
+    FirstNameRoman  string `json:"first_name_roman"`
+    DateOfBirth     Date   `json:"date_of_birth"`
+    DateOfDeath     Date   `json:"date_of_death"`
+    AuthorCopyright bool   `json:"author_copyright"`
 }
 ```
 
@@ -157,8 +157,8 @@ type Person struct {
 ```
 //Worker is entity class of worker info.
 type Worker struct {
-	WorkerID int    `json:"id"`
-	Name     string `json:"name"`
+    WorkerID int    `json:"id"`
+    Name     string `json:"name"`
 }
 ```
 
@@ -167,10 +167,10 @@ type Worker struct {
 ```
 //Ranking is entity class of ranking info.
 type Ranking []struct {
-	BookID  int      `json:"book_id"`
-	Access  int      `json:"access"`
-	Title   string   `json:"title"`
-	Authors []string `json:"authors"`
+    BookID  int      `json:"book_id"`
+    Access  int      `json:"access"`
+    Title   string   `json:"title"`
+    Authors []string `json:"authors"`
 }
 ```
 
