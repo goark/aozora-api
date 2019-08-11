@@ -6,11 +6,15 @@
 
 ## Usage of package
 
-### Search for Aozora-bunko Books Data
+### Import Package
 
 ```
 import "github.com/spiegel-im-spiegel/aozora-api"
+```
 
+### Search for Aozora-bunko Books Data
+
+```
 books, err := aozora.DefaultClient().SearchBooks(
     aozora.WithBookTitle("/天に積む宝/"),
     aozora.WithBookAuthor("富田倫生"),
@@ -20,16 +24,12 @@ books, err := aozora.DefaultClient().SearchBooks(
 ### Lookup Aozora-bunko Book Data
 
 ```
-import "github.com/spiegel-im-spiegel/aozora-api"
-
 book, err := aozora.DefaultClient().LookupBook(59489)
 ```
 
 ### Search for Aozora-bunko Persons Data
 
 ```
-import "github.com/spiegel-im-spiegel/aozora-api"
-
 persons, err := aozora.DefaultClient().SearchPersons(
     aozora.WithPersonName("富田倫生"),
 )
@@ -38,16 +38,12 @@ persons, err := aozora.DefaultClient().SearchPersons(
 ### Lookup Aozora-bunko Person Data
 
 ```
-import "github.com/spiegel-im-spiegel/aozora-api"
-
 person, err := aozora.DefaultClient().LookupPerson(55)
 ```
 
 ### Search for Aozora-bunko Workers Data
 
 ```
-import "github.com/spiegel-im-spiegel/aozora-api"
-
 workers, err := aozora.DefaultClient().SearchWorkers(
     aozora.WithWorkerName("雪森"),
 )
@@ -56,16 +52,12 @@ workers, err := aozora.DefaultClient().SearchWorkers(
 ### Lookup Aozora-bunko Worker Data
 
 ```
-import "github.com/spiegel-im-spiegel/aozora-api"
-
 worker, err := aozora.DefaultClient().LookupWorker(845)
 ```
 
 ### Lookup Ranking data of Aozora-bunko
 
 ```
-import "github.com/spiegel-im-spiegel/aozora-api"
-
 tm, err := time.Parse("2006-01", "2019-01")
 ranking, err := aozora.DefaultClient().Ranking(tm)
 ```
