@@ -6,6 +6,36 @@ import (
 	"time"
 )
 
+// func TestSearchBooks(t *testing.T) {
+// 	testCases := []struct {
+// 		title  string
+// 		author string
+// 		field1 string
+// 		field2 string
+// 		limit  int
+// 		skip   int
+// 		after  time.Time
+// 		str    string
+// 	}{
+// 		{title: "title", author: "author", field1: "field1", field2: "field2", limit: 100, skip: 200, after: time.Now(), str: ""},
+// 	}
+//
+// 	for _, tc := range testCases {
+// 		s := DefaultClient().SearchBooksRaw(
+// 			WithBookTitle(tc.title),
+// 			WithBookAuthor(tc.author),
+// 			WithBookFields(tc.field1),
+// 			WithBookFields(tc.field2),
+// 			WithBookLimit(tc.limit),
+// 			WithBookSkip(tc.skip),
+// 			WithBookAfter(tc.after),
+// 		)
+// 		if s != tc.str {
+// 			t.Errorf("Client.MakeSearchCommand() is \"%v\", want \"%v\"", s, tc.str)
+// 		}
+// 	}
+// }
+
 func TestMakeSearchCommand(t *testing.T) {
 	testCases := []struct {
 		t   Target
@@ -13,15 +43,15 @@ func TestMakeSearchCommand(t *testing.T) {
 		str string
 	}{
 		{t: Target(0), v: nil, str: "http://www.aozorahack.net/api/v0.1/unknown"},
-		{t: Books, v: nil, str: "http://www.aozorahack.net/api/v0.1/books"},
-		{t: Books, v: url.Values{}, str: "http://www.aozorahack.net/api/v0.1/books"},
-		{t: Books, v: url.Values{"title": {"/foo/"}, "author": {"foo bar"}}, str: "http://www.aozorahack.net/api/v0.1/books?author=foo+bar&title=%2Ffoo%2F"},
-		{t: Persons, v: nil, str: "http://www.aozorahack.net/api/v0.1/persons"},
-		{t: Persons, v: url.Values{}, str: "http://www.aozorahack.net/api/v0.1/persons"},
-		{t: Persons, v: url.Values{"name": {"foo bar"}}, str: "http://www.aozorahack.net/api/v0.1/persons?name=foo+bar"},
-		{t: Workers, v: nil, str: "http://www.aozorahack.net/api/v0.1/workers"},
-		{t: Workers, v: url.Values{}, str: "http://www.aozorahack.net/api/v0.1/workers"},
-		{t: Workers, v: url.Values{"name": {"foo bar"}}, str: "http://www.aozorahack.net/api/v0.1/workers?name=foo+bar"},
+		{t: TargetBooks, v: nil, str: "http://www.aozorahack.net/api/v0.1/books"},
+		{t: TargetBooks, v: url.Values{}, str: "http://www.aozorahack.net/api/v0.1/books"},
+		{t: TargetBooks, v: url.Values{"title": {"/foo/"}, "author": {"foo bar"}}, str: "http://www.aozorahack.net/api/v0.1/books?author=foo+bar&title=%2Ffoo%2F"},
+		{t: TargetPersons, v: nil, str: "http://www.aozorahack.net/api/v0.1/persons"},
+		{t: TargetPersons, v: url.Values{}, str: "http://www.aozorahack.net/api/v0.1/persons"},
+		{t: TargetPersons, v: url.Values{"name": {"foo bar"}}, str: "http://www.aozorahack.net/api/v0.1/persons?name=foo+bar"},
+		{t: TargetWorkers, v: nil, str: "http://www.aozorahack.net/api/v0.1/workers"},
+		{t: TargetWorkers, v: url.Values{}, str: "http://www.aozorahack.net/api/v0.1/workers"},
+		{t: TargetWorkers, v: url.Values{"name": {"foo bar"}}, str: "http://www.aozorahack.net/api/v0.1/workers?name=foo+bar"},
 	}
 
 	for _, tc := range testCases {
@@ -38,9 +68,9 @@ func TestMakeLookupCommand(t *testing.T) {
 		id  string
 		str string
 	}{
-		{t: Books, id: "1234", str: "http://www.aozorahack.net/api/v0.1/books/1234"},
-		{t: Persons, id: "1234", str: "http://www.aozorahack.net/api/v0.1/persons/1234"},
-		{t: Workers, id: "1234", str: "http://www.aozorahack.net/api/v0.1/workers/1234"},
+		{t: TargetBooks, id: "1234", str: "http://www.aozorahack.net/api/v0.1/books/1234"},
+		{t: TargetPersons, id: "1234", str: "http://www.aozorahack.net/api/v0.1/persons/1234"},
+		{t: TargetWorkers, id: "1234", str: "http://www.aozorahack.net/api/v0.1/workers/1234"},
 	}
 
 	for _, tc := range testCases {

@@ -1,29 +1,29 @@
-package aozora
+package ecode
 
-import (
-	"fmt"
-	"testing"
+import "fmt"
+
+//ECode is error codes for books-data
+type ECode int
+
+const (
+	ErrNullPointer ECode = iota + 1
+	ErrNoCommand
+	ErrInvalidAPIParameter
+	ErrInvalidAPIResponse
+	ErrNoData
 )
 
-func TestError(t *testing.T) {
-	testCases := []struct {
-		err error
-		str string
-	}{
-		{err: Error(0), str: "unknown error (0)"},
-		{err: ErrNullPointer, str: "Null reference instance"},
-		{err: ErrHTTPStatus, str: "Bad HTTP status"},
-		{err: ErrNoData, str: "No response data"},
-		{err: Error(4), str: "unknown error (4)"},
-	}
+var errMessages = map[ECode]string{
+	ErrNullPointer: "Null reference instance",
+	ErrNoCommand:   "No command",
+	ErrNoData:      "No response data",
+}
 
-	for _, tc := range testCases {
-		errStr := tc.err.Error()
-		if errStr != tc.str {
-			t.Errorf("\"%v\" != \"%v\"", errStr, tc.str)
-		}
-		fmt.Printf("Info(TestError): %+v\n", tc.err)
+func (e ECode) Error() string {
+	if s, ok := errMessages[e]; ok {
+		return s
 	}
+	return fmt.Sprintf("unknown error (%d)", int(e))
 }
 
 /* Copyright 2019 Spiegel

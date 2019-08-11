@@ -7,16 +7,14 @@ type Error int
 
 const (
 	ErrNullPointer Error = iota + 1
-	ErrInvalidAPIParameter
-	ErrInvalidAPIResponse
+	ErrHTTPStatus
 	ErrNoData
 )
 
 var errMessages = map[Error]string{
-	ErrNullPointer:         "Null reference instance",
-	ErrInvalidAPIParameter: "Invalid API parameter",
-	ErrInvalidAPIResponse:  "Invalid response data from API",
-	ErrNoData:              "No response data",
+	ErrNullPointer: "Null reference instance",
+	ErrHTTPStatus:  "Bad HTTP status",
+	ErrNoData:      "No response data",
 }
 
 func (e Error) Error() string {

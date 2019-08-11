@@ -4,17 +4,17 @@ package aozora
 type Target int
 
 const (
-	Books Target = iota + 1
-	Persons
-	Workers
-	Ranking
+	TargetBooks Target = iota + 1
+	TargetPersons
+	TargetWorkers
+	TargetRanking
 )
 
 var targetMap = map[Target]string{
-	Books:   "books",
-	Persons: "persons",
-	Workers: "workers",
-	Ranking: "ranking",
+	TargetBooks:   "books",
+	TargetPersons: "persons",
+	TargetWorkers: "workers",
+	TargetRanking: "ranking",
 }
 
 func (t Target) String() string {
