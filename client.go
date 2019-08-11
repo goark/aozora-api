@@ -157,12 +157,12 @@ func WithWorkerName(name string) SearchWorkersParamsFunc {
 }
 
 //LookupBookRaw gets book data (raw data)
-func (c *Client) LookupBookRaw(id string) ([]byte, error) {
+func (c *Client) LookupBookRaw(id int) ([]byte, error) {
 	return c.get(c.MakeLookupCommand(TargetBooks, id))
 }
 
 //LookupBook gets books data (struct data)
-func (c *Client) LookupBook(id string) (*Book, error) {
+func (c *Client) LookupBook(id int) (*Book, error) {
 	b, err := c.LookupBookRaw(id)
 	if err != nil {
 		return nil, errs.Wrapf(err, "error in Client.LookupBookRaw() function")
@@ -171,22 +171,22 @@ func (c *Client) LookupBook(id string) (*Book, error) {
 }
 
 //LookupBookCardRaw gets book card info (HTML page data)
-func (c *Client) LookupBookCardRaw(id string) ([]byte, error) {
+func (c *Client) LookupBookCardRaw(id int) ([]byte, error) {
 	return c.get(c.MakeCardCommand(id))
 }
 
 //LookupBookContentRaw gets book content (plain or HTML formatted text data)
-func (c *Client) LookupBookContentRaw(id string, f Format) ([]byte, error) {
+func (c *Client) LookupBookContentRaw(id int, f Format) ([]byte, error) {
 	return c.get(c.MakeContentCommand(id, f))
 }
 
 //LookupPersonRaw gets person data (raw data)
-func (c *Client) LookupPersonRaw(id string) ([]byte, error) {
+func (c *Client) LookupPersonRaw(id int) ([]byte, error) {
 	return c.get(c.MakeLookupCommand(TargetPersons, id))
 }
 
 //LookupPerson gets person data (struct data)
-func (c *Client) LookupPerson(id string) (*Person, error) {
+func (c *Client) LookupPerson(id int) (*Person, error) {
 	b, err := c.LookupPersonRaw(id)
 	if err != nil {
 		return nil, errs.Wrapf(err, "error in Client.LookupPerson() function")
@@ -195,12 +195,12 @@ func (c *Client) LookupPerson(id string) (*Person, error) {
 }
 
 //LookupWorker gets worker data (raw data)
-func (c *Client) LookupWorkerRaw(id string) ([]byte, error) {
+func (c *Client) LookupWorkerRaw(id int) ([]byte, error) {
 	return c.get(c.MakeLookupCommand(TargetWorkers, id))
 }
 
 //LookupWorkerRaw gets worker data (struct data)
-func (c *Client) LookupWorker(id string) (*Worker, error) {
+func (c *Client) LookupWorker(id int) (*Worker, error) {
 	b, err := c.LookupWorkerRaw(id)
 	if err != nil {
 		return nil, errs.Wrapf(err, "error in Client.LookupWorker() function")
@@ -233,23 +233,23 @@ func (c *Client) MakeSearchCommand(t Target, v url.Values) *url.URL {
 }
 
 //MakeLookupCommand returns URI for lookup command
-func (c *Client) MakeLookupCommand(t Target, id string) *url.URL {
+func (c *Client) MakeLookupCommand(t Target, id int) *url.URL {
 	return &url.URL{
 		Scheme: c.server.scheme,
 		Host:   c.server.name,
-		Path:   fmt.Sprintf("/%v/%v/%v", APIVersion, t, id),
+		Path:   fmt.Sprintf("/%v/%v/%v", APIVersion, t, strconv.Itoa(id)),
 	}
 }
 
 //MakeLookupCommand returns URI for lookup command
-func (c *Client) MakeCardCommand(id string) *url.URL {
+func (c *Client) MakeCardCommand(id int) *url.URL {
 	u := c.MakeLookupCommand(TargetBooks, id)
 	u.Path = u.Path + "/card"
 	return u
 }
 
 //MakeLookupCommand returns URI for lookup command
-func (c *Client) MakeContentCommand(id string, f Format) *url.URL {
+func (c *Client) MakeContentCommand(id int, f Format) *url.URL {
 	u := c.MakeLookupCommand(TargetBooks, id)
 	u.Path = u.Path + "/content"
 	u.RawQuery = (url.Values{"format": {f.String()}}).Encode()

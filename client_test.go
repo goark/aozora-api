@@ -65,12 +65,12 @@ func TestMakeSearchCommand(t *testing.T) {
 func TestMakeLookupCommand(t *testing.T) {
 	testCases := []struct {
 		t   Target
-		id  string
+		id  int
 		str string
 	}{
-		{t: TargetBooks, id: "1234", str: "http://www.aozorahack.net/api/v0.1/books/1234"},
-		{t: TargetPersons, id: "1234", str: "http://www.aozorahack.net/api/v0.1/persons/1234"},
-		{t: TargetWorkers, id: "1234", str: "http://www.aozorahack.net/api/v0.1/workers/1234"},
+		{t: TargetBooks, id: 1234, str: "http://www.aozorahack.net/api/v0.1/books/1234"},
+		{t: TargetPersons, id: 1234, str: "http://www.aozorahack.net/api/v0.1/persons/1234"},
+		{t: TargetWorkers, id: 1234, str: "http://www.aozorahack.net/api/v0.1/workers/1234"},
 	}
 
 	for _, tc := range testCases {
@@ -83,10 +83,10 @@ func TestMakeLookupCommand(t *testing.T) {
 
 func TestMakeCardCommand(t *testing.T) {
 	testCases := []struct {
-		id  string
+		id  int
 		str string
 	}{
-		{id: "1234", str: "http://www.aozorahack.net/api/v0.1/books/1234/card"},
+		{id: 1234, str: "http://www.aozorahack.net/api/v0.1/books/1234/card"},
 	}
 
 	for _, tc := range testCases {
@@ -99,13 +99,13 @@ func TestMakeCardCommand(t *testing.T) {
 
 func TestMakeContentCommand(t *testing.T) {
 	testCases := []struct {
-		id  string
+		id  int
 		f   Format
 		str string
 	}{
-		{id: "1234", f: Format(0), str: "http://www.aozorahack.net/api/v0.1/books/1234/content?format=txt"},
-		{id: "1234", f: Text, str: "http://www.aozorahack.net/api/v0.1/books/1234/content?format=txt"},
-		{id: "1234", f: HTML, str: "http://www.aozorahack.net/api/v0.1/books/1234/content?format=html"},
+		{id: 1234, f: Format(0), str: "http://www.aozorahack.net/api/v0.1/books/1234/content?format=txt"},
+		{id: 1234, f: Text, str: "http://www.aozorahack.net/api/v0.1/books/1234/content?format=txt"},
+		{id: 1234, f: HTML, str: "http://www.aozorahack.net/api/v0.1/books/1234/content?format=html"},
 	}
 
 	for _, tc := range testCases {

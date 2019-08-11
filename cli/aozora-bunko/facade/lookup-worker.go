@@ -2,6 +2,7 @@ package facade
 
 import (
 	"os"
+	"strconv"
 
 	"github.com/spf13/cobra"
 	"github.com/spiegel-im-spiegel/aozora-api"
@@ -19,16 +20,20 @@ func newLookupWorkerCmd(ui *rwi.RWI) *cobra.Command {
 			if len(args) == 0 {
 				return errs.Wrap(os.ErrInvalid, "worker id")
 			}
+			id, err := strconv.Atoi(args[0])
+			if err != nil {
+				return errs.Wrap(err, "invalid worker id")
+			}
 
 			if rawFlag {
-				resp, err := aozora.DefaultClient().LookupWorkerRaw(args[0])
+				resp, err := aozora.DefaultClient().LookupWorkerRaw(id)
 				if err != nil {
 					return debugPrint(ui, err)
 				}
 				return debugPrint(ui, ui.OutputBytes(resp))
 			}
 
-			worker, err := aozora.DefaultClient().LookupWorker(args[0])
+			worker, err := aozora.DefaultClient().LookupWorker(id)
 			if err != nil {
 				return debugPrint(ui, err)
 			}

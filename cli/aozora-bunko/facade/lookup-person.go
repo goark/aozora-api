@@ -2,6 +2,7 @@ package facade
 
 import (
 	"os"
+	"strconv"
 
 	"github.com/spf13/cobra"
 	"github.com/spiegel-im-spiegel/aozora-api"
@@ -19,16 +20,20 @@ func newLookupPersonCmd(ui *rwi.RWI) *cobra.Command {
 			if len(args) == 0 {
 				return errs.Wrap(os.ErrInvalid, "person id")
 			}
+			id, err := strconv.Atoi(args[0])
+			if err != nil {
+				return errs.Wrap(err, "invalid person id")
+			}
 
 			if rawFlag {
-				resp, err := aozora.DefaultClient().LookupPersonRaw(args[0])
+				resp, err := aozora.DefaultClient().LookupPersonRaw(id)
 				if err != nil {
 					return debugPrint(ui, err)
 				}
 				return debugPrint(ui, ui.OutputBytes(resp))
 			}
 
-			person, err := aozora.DefaultClient().LookupPerson(args[0])
+			person, err := aozora.DefaultClient().LookupPerson(id)
 			if err != nil {
 				return debugPrint(ui, err)
 			}

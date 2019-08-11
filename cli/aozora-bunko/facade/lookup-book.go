@@ -2,6 +2,7 @@ package facade
 
 import (
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -64,37 +65,41 @@ func newLookupBookCmd(ui *rwi.RWI) *cobra.Command {
 			if len(args) == 0 {
 				return errs.Wrap(os.ErrInvalid, "book id")
 			}
+			id, err := strconv.Atoi(args[0])
+			if err != nil {
+				return errs.Wrap(err, "invalid book id")
+			}
 
 			client := aozora.DefaultClient()
 			switch content {
 			case TypeText:
-				resp, err := client.LookupBookContentRaw(args[0], aozora.Text)
+				resp, err := client.LookupBookContentRaw(id, aozora.Text)
 				if err != nil {
 					return debugPrint(ui, err)
 				}
 				return debugPrint(ui, ui.OutputBytes(resp))
 			case TypeHTML:
-				resp, err := client.LookupBookContentRaw(args[0], aozora.HTML)
+				resp, err := client.LookupBookContentRaw(id, aozora.HTML)
 				if err != nil {
 					return debugPrint(ui, err)
 				}
 				return debugPrint(ui, ui.OutputBytes(resp))
 			case TypeCard:
-				resp, err := client.LookupBookCardRaw(args[0])
+				resp, err := client.LookupBookCardRaw(id)
 				if err != nil {
 					return debugPrint(ui, err)
 				}
 				return debugPrint(ui, ui.OutputBytes(resp))
 			}
 			if rawFlag {
-				resp, err := aozora.DefaultClient().LookupBookRaw(args[0])
+				resp, err := aozora.DefaultClient().LookupBookRaw(id)
 				if err != nil {
 					return debugPrint(ui, err)
 				}
 				return debugPrint(ui, ui.OutputBytes(resp))
 			}
 
-			book, err := aozora.DefaultClient().LookupBook(args[0])
+			book, err := aozora.DefaultClient().LookupBook(id)
 			if err != nil {
 				return debugPrint(ui, err)
 			}
