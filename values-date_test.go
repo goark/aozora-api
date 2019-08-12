@@ -21,6 +21,7 @@ func TestUnmarshal(t *testing.T) {
 		{s: `{"date_taken": "2005-03"}`, str: "2005-03-01", jsn: `{"date_taken":"2005-03-01"}`},
 		{s: `{"date_taken": "2005"}`, str: "2005-01-01", jsn: `{"date_taken":"2005-01-01"}`},
 		{s: `{"date_taken": ""}`, str: "0001-01-01", jsn: `{"date_taken":""}`},
+		{s: `{"date_taken": null}`, str: "0001-01-01", jsn: `{"date_taken":""}`},
 		{s: `{}`, str: "0001-01-01", jsn: `{"date_taken":""}`},
 	}
 
