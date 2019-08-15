@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/spiegel-im-spiegel/errs"
 )
 
 //Time is wrapper class of time.Time
@@ -16,6 +18,13 @@ func NewDate(tm time.Time) Date {
 	return Date{tm}
 }
 
+var timeTemplate = []string{
+	time.RFC3339,
+	"2006-01-02",
+	"2006-01",
+	"2006",
+}
+
 //UnmarshalJSON returns result of Unmarshal for json.Unmarshal()
 func (t *Date) UnmarshalJSON(b []byte) error {
 	s := strings.Trim(string(b), "\"")
@@ -23,27 +32,16 @@ func (t *Date) UnmarshalJSON(b []byte) error {
 		*t = Date{time.Time{}}
 		return nil
 	}
-	tm, err := time.Parse(time.RFC3339, s)
-	if err == nil {
-		*t = Date{tm}
-		return nil
+	var lastErr error
+	for _, tmplt := range timeTemplate {
+		if tm, err := time.Parse(tmplt, s); err != nil {
+			lastErr = err
+		} else {
+			*t = Date{tm}
+			return nil
+		}
 	}
-	tm, err = time.Parse("2006-01-02", s)
-	if err == nil {
-		*t = Date{tm}
-		return nil
-	}
-	tm, err = time.Parse("2006-01", s)
-	if err == nil {
-		*t = Date{tm}
-		return nil
-	}
-	tm, err = time.Parse("2006", s)
-	if err == nil {
-		*t = Date{tm}
-		return nil
-	}
-	return err
+	return errs.Wrap(lastErr, "error in Date.UnmarshalJSON() function")
 }
 
 //MarshalJSON returns time string with RFC3339 format
