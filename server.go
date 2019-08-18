@@ -1,6 +1,9 @@
 package aozora
 
-import "net/http"
+import (
+	"net/http"
+	"net/url"
+)
 
 const (
 	DefaultHost = "www.aozorahack.net"
@@ -40,6 +43,14 @@ func WithServerName(host string) ServerOptFunc {
 			s.name = host
 		}
 	}
+}
+
+//CreateClient returns new Client instance
+func (s *Server) URL() *url.URL {
+	if s == nil {
+		return &url.URL{}
+	}
+	return &url.URL{Scheme: s.scheme, Host: s.name}
 }
 
 //CreateClient returns new Client instance

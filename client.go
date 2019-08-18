@@ -224,21 +224,17 @@ func (c *Client) Ranking(tm time.Time) (Ranking, error) {
 
 //MakeSearchCommand returns URI for search command
 func (c *Client) MakeSearchCommand(t Target, v url.Values) *url.URL {
-	return &url.URL{
-		Scheme:   c.server.scheme,
-		Host:     c.server.name,
-		Path:     fmt.Sprintf("/%v/%v", APIVersion, t),
-		RawQuery: v.Encode(),
-	}
+	u := c.server.URL()
+	u.Path = fmt.Sprintf("/%v/%v", APIVersion, t)
+	u.RawQuery = v.Encode()
+	return u
 }
 
 //MakeLookupCommand returns URI for lookup command
 func (c *Client) MakeLookupCommand(t Target, id int) *url.URL {
-	return &url.URL{
-		Scheme: c.server.scheme,
-		Host:   c.server.name,
-		Path:   fmt.Sprintf("/%v/%v/%v", APIVersion, t, strconv.Itoa(id)),
-	}
+	u := c.server.URL()
+	u.Path = fmt.Sprintf("/%v/%v/%v", APIVersion, t, strconv.Itoa(id))
+	return u
 }
 
 //MakeLookupCommand returns URI for lookup command
@@ -258,11 +254,9 @@ func (c *Client) MakeContentCommand(id int, f Format) *url.URL {
 
 //MakeLookupCommand returns URI for lookup ranking info command
 func (c *Client) MakeRankingCommand(tm time.Time) *url.URL {
-	return &url.URL{
-		Scheme: c.server.scheme,
-		Host:   c.server.name,
-		Path:   fmt.Sprintf("/%v/%v/%v/%v", APIVersion, TargetRanking, "xhtml", tm.Format("2006/01")),
-	}
+	u := c.server.URL()
+	u.Path = fmt.Sprintf("/%v/%v/%v/%v", APIVersion, TargetRanking, "xhtml", tm.Format("2006/01"))
+	return u
 }
 
 func (c *Client) get(u *url.URL) ([]byte, error) {
