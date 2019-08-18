@@ -1,6 +1,7 @@
 package aozora
 
 import (
+	"net/http"
 	"net/url"
 	"testing"
 	"time"
@@ -15,13 +16,12 @@ import (
 // 		limit  int
 // 		skip   int
 // 		after  time.Time
-// 		str    string
 // 	}{
-// 		{title: "title", author: "author", field1: "field1", field2: "field2", limit: 100, skip: 200, after: time.Now(), str: ""},
+// 		{title: "title", author: "author", field1: "field1", field2: "field2", limit: 100, skip: 200, after: time.Now()},
 // 	}
 //
 // 	for _, tc := range testCases {
-// 		s := DefaultClient().SearchBooksRaw(
+// 		b, err := DefaultClient().SearchBooksRaw(
 // 			WithBookTitle(tc.title),
 // 			WithBookAuthor(tc.author),
 // 			WithBookFields(tc.field1),
@@ -30,9 +30,12 @@ import (
 // 			WithBookSkip(tc.skip),
 // 			WithBookAfter(tc.after),
 // 		)
-// 		if s != tc.str {
-// 			t.Errorf("Client.MakeSearchCommand() is \"%v\", want \"%v\"", s, tc.str)
+// 		if err != nil {
+// 			t.Errorf("Client.LookupBooksRaw() is \"%v\", want nil", err)
+// 			fmt.Printf("error info: %+v\n", err)
+// 			continue
 // 		}
+// 		fmt.Println(string(b))
 // 	}
 // }
 
@@ -75,7 +78,7 @@ func TestMakeLookupCommand(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		u := DefaultClient().MakeLookupCommand(tc.t, tc.id)
+		u := (*Server)(nil).CreateClient(&http.Client{}).MakeLookupCommand(tc.t, tc.id)
 		if u.String() != tc.str {
 			t.Errorf("Client.MakeLookupCommand() is \"%v\", want \"%v\"", u.String(), tc.str)
 		}

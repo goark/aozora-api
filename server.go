@@ -9,7 +9,7 @@ const (
 	DefaultHost = "www.aozorahack.net"
 )
 
-//Server is informations of PA-API
+//Server is informations of Aozora API
 type Server struct {
 	scheme string
 	name   string //Aozora API server name
@@ -27,7 +27,7 @@ func New(opts ...ServerOptFunc) *Server {
 	return server
 }
 
-//WithScheme returns function for setting Marketplace
+//WithScheme returns function for setting scheme
 func WithScheme(scheme string) ServerOptFunc {
 	return func(s *Server) {
 		if s != nil {
@@ -36,7 +36,7 @@ func WithScheme(scheme string) ServerOptFunc {
 	}
 }
 
-//WithServerName returns function for setting Marketplace
+//WithServerName returns function for setting hostname
 func WithServerName(host string) ServerOptFunc {
 	return func(s *Server) {
 		if s != nil {
@@ -45,24 +45,23 @@ func WithServerName(host string) ServerOptFunc {
 	}
 }
 
-//CreateClient returns new Client instance
+//URL returns url.URL instance
 func (s *Server) URL() *url.URL {
 	if s == nil {
-		return &url.URL{}
+		s = New()
 	}
 	return &url.URL{Scheme: s.scheme, Host: s.name}
 }
 
 //CreateClient returns new Client instance
 func (s *Server) CreateClient(client *http.Client) *Client {
-	svr := s
-	if svr == nil {
-		svr = New()
+	if s == nil {
+		s = New()
 	}
-	if client != nil {
-		return &Client{server: svr, client: client}
+	if client == nil {
+		client = http.DefaultClient
 	}
-	return &Client{server: svr, client: http.DefaultClient}
+	return &Client{server: s, client: client}
 }
 
 //DefaultClient returns new Client instance with default setting

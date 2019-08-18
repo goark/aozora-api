@@ -165,7 +165,7 @@ func (c *Client) LookupBookRaw(id int) ([]byte, error) {
 func (c *Client) LookupBook(id int) (*Book, error) {
 	b, err := c.LookupBookRaw(id)
 	if err != nil {
-		return nil, errs.Wrapf(err, "error in Client.LookupBookRaw() function")
+		return nil, errs.Wrapf(err, "error in Client.LookupBook() function")
 	}
 	return DecodeBook(b)
 }
