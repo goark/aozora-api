@@ -46,6 +46,7 @@ func TestMakeSearchCommand(t *testing.T) {
 		{t: TargetBooks, v: nil, str: "http://www.aozorahack.net/api/v0.1/books"},
 		{t: TargetBooks, v: url.Values{}, str: "http://www.aozorahack.net/api/v0.1/books"},
 		{t: TargetBooks, v: url.Values{"title": {"/foo/"}, "author": {"foo bar"}}, str: "http://www.aozorahack.net/api/v0.1/books?author=foo+bar&title=%2Ffoo%2F"},
+		{t: TargetBooks, v: url.Values{"title": {"/foo/&author=bar"}}, str: "http://www.aozorahack.net/api/v0.1/books?title=%2Ffoo%2F%26author%3Dbar"},
 		{t: TargetPersons, v: nil, str: "http://www.aozorahack.net/api/v0.1/persons"},
 		{t: TargetPersons, v: url.Values{}, str: "http://www.aozorahack.net/api/v0.1/persons"},
 		{t: TargetPersons, v: url.Values{"name": {"foo bar"}}, str: "http://www.aozorahack.net/api/v0.1/persons?name=foo+bar"},
