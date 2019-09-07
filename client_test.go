@@ -7,38 +7,6 @@ import (
 	"time"
 )
 
-// func TestSearchBooks(t *testing.T) {
-// 	testCases := []struct {
-// 		title  string
-// 		author string
-// 		field1 string
-// 		field2 string
-// 		limit  int
-// 		skip   int
-// 		after  time.Time
-// 	}{
-// 		{title: "title", author: "author", field1: "field1", field2: "field2", limit: 100, skip: 200, after: time.Now()},
-// 	}
-//
-// 	for _, tc := range testCases {
-// 		b, err := DefaultClient().SearchBooksRaw(
-// 			WithBookTitle(tc.title),
-// 			WithBookAuthor(tc.author),
-// 			WithBookFields(tc.field1),
-// 			WithBookFields(tc.field2),
-// 			WithBookLimit(tc.limit),
-// 			WithBookSkip(tc.skip),
-// 			WithBookAfter(tc.after),
-// 		)
-// 		if err != nil {
-// 			t.Errorf("Client.LookupBooksRaw() is \"%v\", want nil", err)
-// 			fmt.Printf("error info: %+v\n", err)
-// 			continue
-// 		}
-// 		fmt.Println(string(b))
-// 	}
-// }
-
 func TestMakeSearchCommand(t *testing.T) {
 	testCases := []struct {
 		t   Target
@@ -78,7 +46,7 @@ func TestMakeLookupCommand(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		u := (*Server)(nil).CreateClient(&http.Client{}).MakeLookupCommand(tc.t, tc.id)
+		u := (*Server)(nil).CreateClient(nil, &http.Client{}).MakeLookupCommand(tc.t, tc.id)
 		if u.String() != tc.str {
 			t.Errorf("Client.MakeLookupCommand() is \"%v\", want \"%v\"", u.String(), tc.str)
 		}

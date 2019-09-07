@@ -1,6 +1,7 @@
 package facade
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -59,7 +60,7 @@ func newLookupBookCmd(ui *rwi.RWI) *cobra.Command {
 			if len(c) > 0 {
 				content = NewContent(c)
 				if content == TypeUnknown {
-					return errs.Wrapf(os.ErrInvalid, "content-type %v", c)
+					return errs.Wrap(os.ErrInvalid, fmt.Sprintf("content-type %v", c))
 				}
 			}
 			if len(args) == 0 {

@@ -1,6 +1,7 @@
 package aozora
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 )
@@ -54,19 +55,22 @@ func (s *Server) URL() *url.URL {
 }
 
 //CreateClient returns new Client instance
-func (s *Server) CreateClient(client *http.Client) *Client {
+func (s *Server) CreateClient(ctx context.Context, client *http.Client) *Client {
 	if s == nil {
 		s = New()
 	}
 	if client == nil {
 		client = http.DefaultClient
 	}
-	return &Client{server: s, client: client}
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	return &Client{server: s, client: client, ctx: ctx}
 }
 
 //DefaultClient returns new Client instance with default setting
 func DefaultClient() *Client {
-	return New().CreateClient(nil)
+	return New().CreateClient(nil, nil)
 }
 
 /* Copyright 2019 Spiegel
