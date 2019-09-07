@@ -1,6 +1,7 @@
 package ecode
 
 import (
+	"errors"
 	"fmt"
 	"testing"
 
@@ -41,7 +42,7 @@ func TestECodeErrorEquality(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		res := errs.Is(tc.err1, tc.err2)
+		res := errors.Is(tc.err1, tc.err2)
 		if res != tc.res {
 			t.Errorf("\"%v\" == \"%v\" ? %v, want %v", tc.err1, tc.err2, res, tc.res)
 		}
@@ -72,30 +73,6 @@ func TestWrapNilError(t *testing.T) {
 	}
 }
 
-func TestWrapfError(t *testing.T) {
-	testCases := []struct {
-		err error
-		msg string
-		str string
-	}{
-		{err: ErrNullPointer, msg: "wrapping error", str: "wrapping error: Null reference instance"},
-	}
-
-	for _, tc := range testCases {
-		we := errs.Wrapf(tc.err, "%v", tc.msg)
-		if we.Error() != tc.str {
-			t.Errorf("wrapError.Error() == \"%v\", want \"%v\"", we.Error(), tc.str)
-		}
-		fmt.Printf("Info(TestWrapfError): %+v\n", we)
-	}
-}
-
-func TestWrapfNilError(t *testing.T) {
-	if we := errs.Wrapf(nil, "%v", "null error"); we != nil {
-		t.Errorf("Wrapf(nil) == \"%v\", want nil.", we)
-	}
-}
-
 func TestWrapErrorEquality(t *testing.T) {
 	testCases := []struct {
 		err1 error
@@ -109,7 +86,7 @@ func TestWrapErrorEquality(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		res := errs.Is(tc.err1, tc.err2)
+		res := errors.Is(tc.err1, tc.err2)
 		if res != tc.res {
 			t.Errorf("\"%v\" == \"%v\" ? %v, want %v", tc.err1, tc.err2, res, tc.res)
 		}

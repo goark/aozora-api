@@ -3,18 +3,19 @@ package aozora
 import "testing"
 
 func TestServer(t *testing.T) {
-
 	testCases := []struct {
-		s    *Server
-		host string
+		s   *Server
+		str string
 	}{
-		{s: New(), host: DefaultHost},
-		{s: New(WithServerName("foo")), host: "foo"},
+		{s: (*Server)(nil), str: "http://" + DefaultHost},
+		{s: New(), str: "http://" + DefaultHost},
+		{s: New(WithScheme("foo"), WithServerName("bar")), str: "foo://bar"},
 	}
 
 	for _, tc := range testCases {
-		if tc.s.name != tc.host {
-			t.Errorf("Server.name is \"%v\", want \"%v\"", tc.host, tc.host)
+		str := tc.s.URL().String()
+		if str != tc.str {
+			t.Errorf("Server.name is \"%v\", want \"%v\"", str, tc.str)
 		}
 	}
 }

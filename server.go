@@ -1,12 +1,16 @@
 package aozora
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+	"net/url"
+)
 
 const (
 	DefaultHost = "www.aozorahack.net"
 )
 
-//Server is informations of PA-API
+//Server is informations of Aozora API
 type Server struct {
 	scheme string
 	name   string //Aozora API server name
@@ -24,7 +28,7 @@ func New(opts ...ServerOptFunc) *Server {
 	return server
 }
 
-//WithScheme returns function for setting Marketplace
+//WithScheme returns function for setting scheme
 func WithScheme(scheme string) ServerOptFunc {
 	return func(s *Server) {
 		if s != nil {
@@ -33,7 +37,7 @@ func WithScheme(scheme string) ServerOptFunc {
 	}
 }
 
-//WithServerName returns function for setting Marketplace
+//WithServerName returns function for setting hostname
 func WithServerName(host string) ServerOptFunc {
 	return func(s *Server) {
 		if s != nil {
@@ -42,21 +46,31 @@ func WithServerName(host string) ServerOptFunc {
 	}
 }
 
+//URL returns url.URL instance
+func (s *Server) URL() *url.URL {
+	if s == nil {
+		s = New()
+	}
+	return &url.URL{Scheme: s.scheme, Host: s.name}
+}
+
 //CreateClient returns new Client instance
-func (s *Server) CreateClient(client *http.Client) *Client {
-	svr := s
-	if svr == nil {
-		svr = New()
+func (s *Server) CreateClient(ctx context.Context, client *http.Client) *Client {
+	if s == nil {
+		s = New()
 	}
-	if client != nil {
-		return &Client{server: svr, client: client}
+	if client == nil {
+		client = http.DefaultClient
 	}
-	return &Client{server: svr, client: http.DefaultClient}
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	return &Client{server: s, client: client, ctx: ctx}
 }
 
 //DefaultClient returns new Client instance with default setting
 func DefaultClient() *Client {
-	return New().CreateClient(nil)
+	return New().CreateClient(nil, nil)
 }
 
 /* Copyright 2019 Spiegel

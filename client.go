@@ -1,6 +1,7 @@
 package aozora
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -19,6 +20,7 @@ const (
 type Client struct {
 	server *Server
 	client *http.Client
+	ctx    context.Context
 }
 
 //SearchBooksParamsFunc is self-referential function for functional options pattern
@@ -30,16 +32,18 @@ func (c *Client) SearchBooksRaw(opts ...SearchBooksParamsFunc) ([]byte, error) {
 	for _, opt := range opts {
 		opt(params)
 	}
-	return c.get(c.MakeSearchCommand(TargetBooks, params))
+	b, err := c.get(c.MakeSearchCommand(TargetBooks, params))
+	return b, errs.Wrap(err, "")
 }
 
 //SearchBooks gets list of books (struct data)
 func (c *Client) SearchBooks(opts ...SearchBooksParamsFunc) ([]Book, error) {
 	b, err := c.SearchBooksRaw(opts...)
 	if err != nil {
-		return nil, errs.Wrapf(err, "error in Client.SearchBooks() function")
+		return nil, errs.Wrap(err, "")
 	}
-	return DecodeBooks(b)
+	books, err := DecodeBooks(b)
+	return books, errs.Wrap(err, "")
 }
 
 //WithBookTitle returns function for setting Marketplace
@@ -105,16 +109,18 @@ func (c *Client) SearchPersonsRaw(opts ...SearchPersonsParamsFunc) ([]byte, erro
 	for _, opt := range opts {
 		opt(params)
 	}
-	return c.get(c.MakeSearchCommand(TargetPersons, params))
+	b, err := c.get(c.MakeSearchCommand(TargetPersons, params))
+	return b, errs.Wrap(err, "")
 }
 
 //SearchPersons gets list of persons (struct data)
 func (c *Client) SearchPersons(opts ...SearchPersonsParamsFunc) ([]Person, error) {
 	b, err := c.SearchPersonsRaw(opts...)
 	if err != nil {
-		return nil, errs.Wrapf(err, "error in Client.SearchPersons() function")
+		return nil, errs.Wrap(err, "")
 	}
-	return DecodePersons(b)
+	persons, err := DecodePersons(b)
+	return persons, errs.Wrap(err, "")
 }
 
 //WithPersonName returns function for setting Marketplace
@@ -135,16 +141,18 @@ func (c *Client) SearchWorkersRaw(opts ...SearchWorkersParamsFunc) ([]byte, erro
 	for _, opt := range opts {
 		opt(params)
 	}
-	return c.get(c.MakeSearchCommand(TargetWorkers, params))
+	b, err := c.get(c.MakeSearchCommand(TargetWorkers, params))
+	return b, errs.Wrap(err, "")
 }
 
 //SearchWorkers gets list of workers (struct data)
 func (c *Client) SearchWorkers(opts ...SearchWorkersParamsFunc) ([]Worker, error) {
 	b, err := c.SearchWorkersRaw(opts...)
 	if err != nil {
-		return nil, errs.Wrapf(err, "error in Client.SearchWorkers() function")
+		return nil, errs.Wrap(err, "")
 	}
-	return DecodeWorkers(b)
+	workers, err := DecodeWorkers(b)
+	return workers, errs.Wrap(err, "")
 }
 
 //WithWorkerName returns function for setting Marketplace
@@ -158,87 +166,93 @@ func WithWorkerName(name string) SearchWorkersParamsFunc {
 
 //LookupBookRaw gets book data (raw data)
 func (c *Client) LookupBookRaw(id int) ([]byte, error) {
-	return c.get(c.MakeLookupCommand(TargetBooks, id))
+	b, err := c.get(c.MakeLookupCommand(TargetBooks, id))
+	return b, errs.Wrap(err, "")
 }
 
 //LookupBook gets books data (struct data)
 func (c *Client) LookupBook(id int) (*Book, error) {
 	b, err := c.LookupBookRaw(id)
 	if err != nil {
-		return nil, errs.Wrapf(err, "error in Client.LookupBookRaw() function")
+		return nil, errs.Wrap(err, "")
 	}
-	return DecodeBook(b)
+	book, err := DecodeBook(b)
+	return book, errs.Wrap(err, "")
 }
 
 //LookupBookCardRaw gets book card info (HTML page data)
 func (c *Client) LookupBookCardRaw(id int) ([]byte, error) {
-	return c.get(c.MakeCardCommand(id))
+	b, err := c.get(c.MakeCardCommand(id))
+	return b, errs.Wrap(err, "")
 }
 
 //LookupBookContentRaw gets book content (plain or HTML formatted text data)
 func (c *Client) LookupBookContentRaw(id int, f Format) ([]byte, error) {
-	return c.get(c.MakeContentCommand(id, f))
+	b, err := c.get(c.MakeContentCommand(id, f))
+	return b, errs.Wrap(err, "")
 }
 
 //LookupPersonRaw gets person data (raw data)
 func (c *Client) LookupPersonRaw(id int) ([]byte, error) {
-	return c.get(c.MakeLookupCommand(TargetPersons, id))
+	b, err := c.get(c.MakeLookupCommand(TargetPersons, id))
+	return b, errs.Wrap(err, "")
 }
 
 //LookupPerson gets person data (struct data)
 func (c *Client) LookupPerson(id int) (*Person, error) {
 	b, err := c.LookupPersonRaw(id)
 	if err != nil {
-		return nil, errs.Wrapf(err, "error in Client.LookupPerson() function")
+		return nil, errs.Wrap(err, "")
 	}
-	return DecodePerson(b)
+	person, err := DecodePerson(b)
+	return person, errs.Wrap(err, "")
 }
 
 //LookupWorker gets worker data (raw data)
 func (c *Client) LookupWorkerRaw(id int) ([]byte, error) {
-	return c.get(c.MakeLookupCommand(TargetWorkers, id))
+	b, err := c.get(c.MakeLookupCommand(TargetWorkers, id))
+	return b, errs.Wrap(err, "")
 }
 
 //LookupWorkerRaw gets worker data (struct data)
 func (c *Client) LookupWorker(id int) (*Worker, error) {
 	b, err := c.LookupWorkerRaw(id)
 	if err != nil {
-		return nil, errs.Wrapf(err, "error in Client.LookupWorker() function")
+		return nil, errs.Wrap(err, "")
 	}
-	return DecodeWorker(b)
+	worker, err := DecodeWorker(b)
+	return worker, errs.Wrap(err, "")
 }
 
 //RankingRaw gets ranking data (raw data)
 func (c *Client) RankingRaw(tm time.Time) ([]byte, error) {
-	return c.get(c.MakeRankingCommand(tm))
+	b, err := c.get(c.MakeRankingCommand(tm))
+	return b, errs.Wrap(err, "")
 }
 
 //Ranking gets ranking data (struct data)
 func (c *Client) Ranking(tm time.Time) (Ranking, error) {
 	b, err := c.RankingRaw(tm)
 	if err != nil {
-		return nil, errs.Wrapf(err, "error in Client.Ranking() function")
+		return nil, errs.Wrap(err, "")
 	}
-	return DecodeRanking(b)
+	ranking, err := DecodeRanking(b)
+	return ranking, errs.Wrap(err, "")
 }
 
 //MakeSearchCommand returns URI for search command
 func (c *Client) MakeSearchCommand(t Target, v url.Values) *url.URL {
-	return &url.URL{
-		Scheme:   c.server.scheme,
-		Host:     c.server.name,
-		Path:     fmt.Sprintf("/%v/%v", APIVersion, t),
-		RawQuery: v.Encode(),
-	}
+	u := c.server.URL()
+	u.Path = fmt.Sprintf("/%v/%v", APIVersion, t)
+	u.RawQuery = v.Encode()
+	return u
 }
 
 //MakeLookupCommand returns URI for lookup command
 func (c *Client) MakeLookupCommand(t Target, id int) *url.URL {
-	return &url.URL{
-		Scheme: c.server.scheme,
-		Host:   c.server.name,
-		Path:   fmt.Sprintf("/%v/%v/%v", APIVersion, t, strconv.Itoa(id)),
-	}
+	u := c.server.URL()
+	u.Path = fmt.Sprintf("/%v/%v/%v", APIVersion, t, strconv.Itoa(id))
+	return u
 }
 
 //MakeLookupCommand returns URI for lookup command
@@ -258,26 +272,28 @@ func (c *Client) MakeContentCommand(id int, f Format) *url.URL {
 
 //MakeLookupCommand returns URI for lookup ranking info command
 func (c *Client) MakeRankingCommand(tm time.Time) *url.URL {
-	return &url.URL{
-		Scheme: c.server.scheme,
-		Host:   c.server.name,
-		Path:   fmt.Sprintf("/%v/%v/%v/%v", APIVersion, TargetRanking, "xhtml", tm.Format("2006/01")),
-	}
+	u := c.server.URL()
+	u.Path = fmt.Sprintf("/%v/%v/%v/%v", APIVersion, TargetRanking, "xhtml", tm.Format("2006/01"))
+	return u
 }
 
 func (c *Client) get(u *url.URL) ([]byte, error) {
-	resp, err := c.client.Get(u.String())
+	req, err := http.NewRequestWithContext(c.ctx, "GET", u.String(), nil)
 	if err != nil {
-		return nil, errs.Wrapf(err, "error in Client.get(%v) function", u)
+		return nil, errs.Wrap(err, "", errs.WithParam("url", u.String()))
+	}
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, errs.Wrap(err, "", errs.WithParam("url", u.String()))
 	}
 	defer resp.Body.Close()
 
 	if !(resp.StatusCode != 0 && resp.StatusCode < http.StatusBadRequest) {
-		return nil, errs.Wrapf(ErrHTTPStatus, "%v (in %v)", resp.Status, u)
+		return nil, errs.Wrap(ErrHTTPStatus, "", errs.WithParam("url", u.String()), errs.WithParam("status", resp.Status))
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return body, errs.Wrapf(err, "error in Client.get(%v) function", u)
+		return body, errs.Wrap(err, "", errs.WithParam("url", u.String()))
 	}
 	return body, nil
 }

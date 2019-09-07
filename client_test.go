@@ -1,40 +1,11 @@
 package aozora
 
 import (
+	"net/http"
 	"net/url"
 	"testing"
 	"time"
 )
-
-// func TestSearchBooks(t *testing.T) {
-// 	testCases := []struct {
-// 		title  string
-// 		author string
-// 		field1 string
-// 		field2 string
-// 		limit  int
-// 		skip   int
-// 		after  time.Time
-// 		str    string
-// 	}{
-// 		{title: "title", author: "author", field1: "field1", field2: "field2", limit: 100, skip: 200, after: time.Now(), str: ""},
-// 	}
-//
-// 	for _, tc := range testCases {
-// 		s := DefaultClient().SearchBooksRaw(
-// 			WithBookTitle(tc.title),
-// 			WithBookAuthor(tc.author),
-// 			WithBookFields(tc.field1),
-// 			WithBookFields(tc.field2),
-// 			WithBookLimit(tc.limit),
-// 			WithBookSkip(tc.skip),
-// 			WithBookAfter(tc.after),
-// 		)
-// 		if s != tc.str {
-// 			t.Errorf("Client.MakeSearchCommand() is \"%v\", want \"%v\"", s, tc.str)
-// 		}
-// 	}
-// }
 
 func TestMakeSearchCommand(t *testing.T) {
 	testCases := []struct {
@@ -46,6 +17,7 @@ func TestMakeSearchCommand(t *testing.T) {
 		{t: TargetBooks, v: nil, str: "http://www.aozorahack.net/api/v0.1/books"},
 		{t: TargetBooks, v: url.Values{}, str: "http://www.aozorahack.net/api/v0.1/books"},
 		{t: TargetBooks, v: url.Values{"title": {"/foo/"}, "author": {"foo bar"}}, str: "http://www.aozorahack.net/api/v0.1/books?author=foo+bar&title=%2Ffoo%2F"},
+		{t: TargetBooks, v: url.Values{"title": {"/foo/&author=bar"}}, str: "http://www.aozorahack.net/api/v0.1/books?title=%2Ffoo%2F%26author%3Dbar"},
 		{t: TargetPersons, v: nil, str: "http://www.aozorahack.net/api/v0.1/persons"},
 		{t: TargetPersons, v: url.Values{}, str: "http://www.aozorahack.net/api/v0.1/persons"},
 		{t: TargetPersons, v: url.Values{"name": {"foo bar"}}, str: "http://www.aozorahack.net/api/v0.1/persons?name=foo+bar"},
@@ -74,7 +46,7 @@ func TestMakeLookupCommand(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		u := DefaultClient().MakeLookupCommand(tc.t, tc.id)
+		u := (*Server)(nil).CreateClient(nil, &http.Client{}).MakeLookupCommand(tc.t, tc.id)
 		if u.String() != tc.str {
 			t.Errorf("Client.MakeLookupCommand() is \"%v\", want \"%v\"", u.String(), tc.str)
 		}

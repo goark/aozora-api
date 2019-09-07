@@ -1,6 +1,7 @@
 package facade
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -22,7 +23,7 @@ func newRankingCmd(ui *rwi.RWI) *cobra.Command {
 			}
 			tm, err := time.Parse("2006-01", args[0])
 			if err != nil {
-				return errs.Wrapf(err, "argument: %v", args[0])
+				return errs.Wrap(err, fmt.Sprintf("argument: %v", args[0]))
 			}
 
 			if rawFlag {
