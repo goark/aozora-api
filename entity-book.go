@@ -73,7 +73,7 @@ func (book *Book) String() string {
 func DecodeBook(b []byte) (*Book, error) {
 	book := Book{}
 	if err := json.NewDecoder(bytes.NewReader(b)).Decode(&book); err != nil {
-		return &book, errs.Wrap(err, "error in DecodeBook() function")
+		return &book, errs.Wrap(err, "")
 	}
 	return &book, nil
 }
@@ -82,7 +82,7 @@ func DecodeBook(b []byte) (*Book, error) {
 func DecodeBooks(b []byte) ([]Book, error) {
 	books := []Book{}
 	if err := json.NewDecoder(bytes.NewReader(b)).Decode(&books); err != nil {
-		return books, errs.Wrap(err, "error in DecodeBooks() function")
+		return books, errs.Wrap(err, "")
 	}
 	return books, nil
 }

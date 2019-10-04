@@ -1,7 +1,7 @@
 package aozora
 
 import (
-	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -27,7 +27,10 @@ var timeTemplate = []string{
 
 //UnmarshalJSON returns result of Unmarshal for json.Unmarshal()
 func (t *Date) UnmarshalJSON(b []byte) error {
-	s := strings.Trim(string(b), "\"")
+	s := string(b)
+	if ss, err := strconv.Unquote(s); err == nil {
+		s = ss
+	}
 	if len(s) == 0 || strings.ToLower(s) == "null" {
 		*t = Date{time.Time{}}
 		return nil
@@ -35,24 +38,21 @@ func (t *Date) UnmarshalJSON(b []byte) error {
 	var lastErr error
 	for _, tmplt := range timeTemplate {
 		if tm, err := time.Parse(tmplt, s); err != nil {
-			lastErr = err
+			lastErr = errs.Wrap(err, "", errs.WithParam("time_string", s), errs.WithParam("time_template", tmplt))
 		} else {
 			*t = Date{tm}
 			return nil
 		}
 	}
-	return errs.Wrap(lastErr, "error in Date.UnmarshalJSON() function")
+	return lastErr
 }
 
 //MarshalJSON returns time string with RFC3339 format
 func (t *Date) MarshalJSON() ([]byte, error) {
-	if t == nil {
+	if t == nil || t.IsZero() {
 		return []byte("\"\""), nil
 	}
-	if t.IsZero() {
-		return []byte("\"\""), nil
-	}
-	return []byte(fmt.Sprintf("\"%v\"", t)), nil
+	return []byte(strconv.Quote(t.String())), nil
 }
 
 func (t Date) String() string {
