@@ -54,23 +54,52 @@ func (s *Server) URL() *url.URL {
 	return &url.URL{Scheme: s.scheme, Host: s.name}
 }
 
+//ClientOptFunc is self-referential function for functional options pattern
+type ClientOptFunc func(*Client)
+
 //CreateClient returns new Client instance
-func (s *Server) CreateClient(ctx context.Context, client *http.Client) *Client {
+func (s *Server) CreateClient(opts ...ClientOptFunc) *Client {
 	if s == nil {
 		s = New()
 	}
-	if client == nil {
-		client = http.DefaultClient
+	cli := &Client{
+		server: s,
+		client: nil,
+		ctx:    nil,
 	}
-	if ctx == nil {
-		ctx = context.Background()
+	for _, opt := range opts {
+		opt(cli)
 	}
-	return &Client{server: s, client: client, ctx: ctx}
+	if cli.client == nil {
+		cli.client = http.DefaultClient
+	}
+	if cli.ctx == nil {
+		cli.ctx = context.Background()
+	}
+	return cli
+}
+
+//WithContext returns function for setting context.Context
+func WithContext(ctx context.Context) ClientOptFunc {
+	return func(c *Client) {
+		if c != nil {
+			c.ctx = ctx
+		}
+	}
+}
+
+//WithHttpCilent returns function for setting http.Client
+func WithHttpCilent(client *http.Client) ClientOptFunc {
+	return func(c *Client) {
+		if c != nil {
+			c.client = client
+		}
+	}
 }
 
 //DefaultClient returns new Client instance with default setting
 func DefaultClient() *Client {
-	return New().CreateClient(nil, nil)
+	return New().CreateClient()
 }
 
 /* Copyright 2019 Spiegel
