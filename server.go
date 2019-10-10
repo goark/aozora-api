@@ -88,8 +88,8 @@ func WithContext(ctx context.Context) ClientOptFunc {
 	}
 }
 
-//WithHttpCilent returns function for setting http.Client
-func WithHttpCilent(client *http.Client) ClientOptFunc {
+//WithHttpClient returns function for setting http.Client
+func WithHttpClient(client *http.Client) ClientOptFunc {
 	return func(c *Client) {
 		if c != nil {
 			c.client = client

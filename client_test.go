@@ -47,7 +47,7 @@ func TestMakeLookupCommand(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		u := (*Server)(nil).CreateClient(WithContext(context.Background()), WithHttpCilent(&http.Client{})).MakeLookupCommand(tc.t, tc.id)
+		u := (*Server)(nil).CreateClient(WithContext(context.Background()), WithHttpClient(&http.Client{})).MakeLookupCommand(tc.t, tc.id)
 		if u.String() != tc.str {
 			t.Errorf("Client.MakeLookupCommand() is \"%v\", want \"%v\"", u.String(), tc.str)
 		}
