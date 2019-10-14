@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	DefaultHost = "www.aozorahack.net"
+	defaultScheme = "http"
+	defaultHost   = "www.aozorahack.net"
 )
 
 //Server is informations of Aozora API
@@ -21,7 +22,7 @@ type ServerOptFunc func(*Server)
 
 //New returns new Server instance
 func New(opts ...ServerOptFunc) *Server {
-	server := &Server{scheme: "http", name: DefaultHost}
+	server := &Server{scheme: defaultScheme, name: defaultHost}
 	for _, opt := range opts {
 		opt(server)
 	}

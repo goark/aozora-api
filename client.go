@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	APIVersion = "api/v0.1"
+	defaultAPIDir = "api/v0.1"
 )
 
 //Client is http.Client for Aozora API Server
@@ -32,7 +32,7 @@ func (c *Client) SearchBooksRaw(opts ...SearchBooksParamsFunc) ([]byte, error) {
 	for _, opt := range opts {
 		opt(params)
 	}
-	b, err := c.get(c.MakeSearchCommand(TargetBooks, params))
+	b, err := c.get(c.makeSearchCommand(TargetBooks, params))
 	return b, errs.Wrap(err, "")
 }
 
@@ -109,7 +109,7 @@ func (c *Client) SearchPersonsRaw(opts ...SearchPersonsParamsFunc) ([]byte, erro
 	for _, opt := range opts {
 		opt(params)
 	}
-	b, err := c.get(c.MakeSearchCommand(TargetPersons, params))
+	b, err := c.get(c.makeSearchCommand(TargetPersons, params))
 	return b, errs.Wrap(err, "")
 }
 
@@ -141,7 +141,7 @@ func (c *Client) SearchWorkersRaw(opts ...SearchWorkersParamsFunc) ([]byte, erro
 	for _, opt := range opts {
 		opt(params)
 	}
-	b, err := c.get(c.MakeSearchCommand(TargetWorkers, params))
+	b, err := c.get(c.makeSearchCommand(TargetWorkers, params))
 	return b, errs.Wrap(err, "")
 }
 
@@ -166,7 +166,7 @@ func WithWorkerName(name string) SearchWorkersParamsFunc {
 
 //LookupBookRaw gets book data (raw data)
 func (c *Client) LookupBookRaw(id int) ([]byte, error) {
-	b, err := c.get(c.MakeLookupCommand(TargetBooks, id))
+	b, err := c.get(c.makeLookupCommand(TargetBooks, id))
 	return b, errs.Wrap(err, "")
 }
 
@@ -182,19 +182,19 @@ func (c *Client) LookupBook(id int) (*Book, error) {
 
 //LookupBookCardRaw gets book card info (HTML page data)
 func (c *Client) LookupBookCardRaw(id int) ([]byte, error) {
-	b, err := c.get(c.MakeCardCommand(id))
+	b, err := c.get(c.makeCardCommand(id))
 	return b, errs.Wrap(err, "")
 }
 
 //LookupBookContentRaw gets book content (plain or HTML formatted text data)
 func (c *Client) LookupBookContentRaw(id int, f Format) ([]byte, error) {
-	b, err := c.get(c.MakeContentCommand(id, f))
+	b, err := c.get(c.makeContentCommand(id, f))
 	return b, errs.Wrap(err, "")
 }
 
 //LookupPersonRaw gets person data (raw data)
 func (c *Client) LookupPersonRaw(id int) ([]byte, error) {
-	b, err := c.get(c.MakeLookupCommand(TargetPersons, id))
+	b, err := c.get(c.makeLookupCommand(TargetPersons, id))
 	return b, errs.Wrap(err, "")
 }
 
@@ -210,7 +210,7 @@ func (c *Client) LookupPerson(id int) (*Person, error) {
 
 //LookupWorker gets worker data (raw data)
 func (c *Client) LookupWorkerRaw(id int) ([]byte, error) {
-	b, err := c.get(c.MakeLookupCommand(TargetWorkers, id))
+	b, err := c.get(c.makeLookupCommand(TargetWorkers, id))
 	return b, errs.Wrap(err, "")
 }
 
@@ -226,7 +226,7 @@ func (c *Client) LookupWorker(id int) (*Worker, error) {
 
 //RankingRaw gets ranking data (raw data)
 func (c *Client) RankingRaw(tm time.Time) ([]byte, error) {
-	b, err := c.get(c.MakeRankingCommand(tm))
+	b, err := c.get(c.makeRankingCommand(tm))
 	return b, errs.Wrap(err, "")
 }
 
@@ -240,60 +240,59 @@ func (c *Client) Ranking(tm time.Time) (Ranking, error) {
 	return ranking, errs.Wrap(err, "")
 }
 
-//MakeSearchCommand returns URI for search command
-func (c *Client) MakeSearchCommand(t Target, v url.Values) *url.URL {
+func (c *Client) makeSearchCommand(t Target, v url.Values) *url.URL {
 	u := c.server.URL()
-	u.Path = fmt.Sprintf("/%v/%v", APIVersion, t)
+	u.Path = fmt.Sprintf("/%v/%v", c.apiDir(), t)
 	u.RawQuery = v.Encode()
 	return u
 }
 
-//MakeLookupCommand returns URI for lookup command
-func (c *Client) MakeLookupCommand(t Target, id int) *url.URL {
+func (c *Client) makeLookupCommand(t Target, id int) *url.URL {
 	u := c.server.URL()
-	u.Path = fmt.Sprintf("/%v/%v/%v", APIVersion, t, strconv.Itoa(id))
+	u.Path = fmt.Sprintf("/%v/%v/%v", c.apiDir(), t, strconv.Itoa(id))
 	return u
 }
 
-//MakeLookupCommand returns URI for lookup command
-func (c *Client) MakeCardCommand(id int) *url.URL {
-	u := c.MakeLookupCommand(TargetBooks, id)
+func (c *Client) makeCardCommand(id int) *url.URL {
+	u := c.makeLookupCommand(TargetBooks, id)
 	u.Path = u.Path + "/card"
 	return u
 }
 
-//MakeLookupCommand returns URI for lookup command
-func (c *Client) MakeContentCommand(id int, f Format) *url.URL {
-	u := c.MakeLookupCommand(TargetBooks, id)
+func (c *Client) makeContentCommand(id int, f Format) *url.URL {
+	u := c.makeLookupCommand(TargetBooks, id)
 	u.Path = u.Path + "/content"
 	u.RawQuery = (url.Values{"format": {f.String()}}).Encode()
 	return u
 }
 
-//MakeLookupCommand returns URI for lookup ranking info command
-func (c *Client) MakeRankingCommand(tm time.Time) *url.URL {
+func (c *Client) makeRankingCommand(tm time.Time) *url.URL {
 	u := c.server.URL()
-	u.Path = fmt.Sprintf("/%v/%v/%v/%v", APIVersion, TargetRanking, "xhtml", tm.Format("2006/01"))
+	u.Path = fmt.Sprintf("/%v/%v/%v/%v", c.apiDir(), TargetRanking, "xhtml", tm.Format("2006/01"))
 	return u
+}
+
+func (c *Client) apiDir() string {
+	return defaultAPIDir
 }
 
 func (c *Client) get(u *url.URL) ([]byte, error) {
 	req, err := http.NewRequestWithContext(c.ctx, "GET", u.String(), nil)
 	if err != nil {
-		return nil, errs.Wrap(err, "", errs.WithParam("url", u.String()))
+		return nil, errs.Wrap(err, "", errs.WithContext("url", u.String()))
 	}
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, errs.Wrap(err, "", errs.WithParam("url", u.String()))
+		return nil, errs.Wrap(err, "", errs.WithContext("url", u.String()))
 	}
 	defer resp.Body.Close()
 
 	if !(resp.StatusCode != 0 && resp.StatusCode < http.StatusBadRequest) {
-		return nil, errs.Wrap(ErrHTTPStatus, "", errs.WithParam("url", u.String()), errs.WithParam("status", resp.Status))
+		return nil, errs.Wrap(ErrHTTPStatus, "", errs.WithContext("url", u.String()), errs.WithContext("status", resp.Status))
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return body, errs.Wrap(err, "", errs.WithParam("url", u.String()))
+		return body, errs.Wrap(err, "", errs.WithContext("url", u.String()))
 	}
 	return body, nil
 }
