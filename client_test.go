@@ -28,7 +28,7 @@ func TestMakeSearchCommand(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		u := DefaultClient().MakeSearchCommand(tc.t, tc.v)
+		u := DefaultClient().makeSearchCommand(tc.t, tc.v)
 		if u.String() != tc.str {
 			t.Errorf("Client.MakeSearchCommand() is \"%v\", want \"%v\"", u.String(), tc.str)
 		}
@@ -47,7 +47,7 @@ func TestMakeLookupCommand(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		u := (*Server)(nil).CreateClient(WithContext(context.Background()), WithHttpClient(&http.Client{})).MakeLookupCommand(tc.t, tc.id)
+		u := (*Server)(nil).CreateClient(WithContext(context.Background()), WithHttpClient(&http.Client{})).makeLookupCommand(tc.t, tc.id)
 		if u.String() != tc.str {
 			t.Errorf("Client.MakeLookupCommand() is \"%v\", want \"%v\"", u.String(), tc.str)
 		}
@@ -63,7 +63,7 @@ func TestMakeCardCommand(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		u := DefaultClient().MakeCardCommand(tc.id)
+		u := DefaultClient().makeCardCommand(tc.id)
 		if u.String() != tc.str {
 			t.Errorf("Client.MakeCardCommand() is \"%v\", want \"%v\"", u.String(), tc.str)
 		}
@@ -82,9 +82,9 @@ func TestMakeContentCommand(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		u := DefaultClient().MakeContentCommand(tc.id, tc.f)
+		u := DefaultClient().makeContentCommand(tc.id, tc.f)
 		if u.String() != tc.str {
-			t.Errorf("Client.MakeContentCommand() is \"%v\", want \"%v\"", u.String(), tc.str)
+			t.Errorf("Client.makeContentCommand() is \"%v\", want \"%v\"", u.String(), tc.str)
 		}
 	}
 }
@@ -98,7 +98,7 @@ func TestMakeRankingCommand(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		u := DefaultClient().MakeRankingCommand(tc.tm)
+		u := DefaultClient().makeRankingCommand(tc.tm)
 		if u.String() != tc.str {
 			t.Errorf("Client.MakeRankingCommand() is \"%v\", want \"%v\"", u.String(), tc.str)
 		}
