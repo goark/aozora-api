@@ -30,7 +30,7 @@ var contentMap = map[ContentType]string{
 
 func NewContent(s string) ContentType {
 	for k, v := range contentMap {
-		if strings.ToLower(s) == strings.ToLower(v) {
+		if strings.EqualFold(s, v) {
 			return k
 		}
 	}
