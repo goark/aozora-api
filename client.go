@@ -33,17 +33,17 @@ func (c *Client) SearchBooksRaw(opts ...SearchBooksParamsFunc) ([]byte, error) {
 		opt(params)
 	}
 	b, err := c.get(c.makeSearchCommand(TargetBooks, params))
-	return b, errs.Wrap(err, "")
+	return b, errs.Wrap(err)
 }
 
 //SearchBooks gets list of books (struct data)
 func (c *Client) SearchBooks(opts ...SearchBooksParamsFunc) ([]Book, error) {
 	b, err := c.SearchBooksRaw(opts...)
 	if err != nil {
-		return nil, errs.Wrap(err, "")
+		return nil, errs.Wrap(err)
 	}
 	books, err := DecodeBooks(b)
-	return books, errs.Wrap(err, "")
+	return books, errs.Wrap(err)
 }
 
 //WithBookTitle returns function for setting Marketplace
@@ -110,17 +110,17 @@ func (c *Client) SearchPersonsRaw(opts ...SearchPersonsParamsFunc) ([]byte, erro
 		opt(params)
 	}
 	b, err := c.get(c.makeSearchCommand(TargetPersons, params))
-	return b, errs.Wrap(err, "")
+	return b, errs.Wrap(err)
 }
 
 //SearchPersons gets list of persons (struct data)
 func (c *Client) SearchPersons(opts ...SearchPersonsParamsFunc) ([]Person, error) {
 	b, err := c.SearchPersonsRaw(opts...)
 	if err != nil {
-		return nil, errs.Wrap(err, "")
+		return nil, errs.Wrap(err)
 	}
 	persons, err := DecodePersons(b)
-	return persons, errs.Wrap(err, "")
+	return persons, errs.Wrap(err)
 }
 
 //WithPersonName returns function for setting Marketplace
@@ -142,17 +142,17 @@ func (c *Client) SearchWorkersRaw(opts ...SearchWorkersParamsFunc) ([]byte, erro
 		opt(params)
 	}
 	b, err := c.get(c.makeSearchCommand(TargetWorkers, params))
-	return b, errs.Wrap(err, "")
+	return b, errs.Wrap(err)
 }
 
 //SearchWorkers gets list of workers (struct data)
 func (c *Client) SearchWorkers(opts ...SearchWorkersParamsFunc) ([]Worker, error) {
 	b, err := c.SearchWorkersRaw(opts...)
 	if err != nil {
-		return nil, errs.Wrap(err, "")
+		return nil, errs.Wrap(err)
 	}
 	workers, err := DecodeWorkers(b)
-	return workers, errs.Wrap(err, "")
+	return workers, errs.Wrap(err)
 }
 
 //WithWorkerName returns function for setting Marketplace
@@ -167,77 +167,77 @@ func WithWorkerName(name string) SearchWorkersParamsFunc {
 //LookupBookRaw gets book data (raw data)
 func (c *Client) LookupBookRaw(id int) ([]byte, error) {
 	b, err := c.get(c.makeLookupCommand(TargetBooks, id))
-	return b, errs.Wrap(err, "")
+	return b, errs.Wrap(err)
 }
 
 //LookupBook gets books data (struct data)
 func (c *Client) LookupBook(id int) (*Book, error) {
 	b, err := c.LookupBookRaw(id)
 	if err != nil {
-		return nil, errs.Wrap(err, "")
+		return nil, errs.Wrap(err)
 	}
 	book, err := DecodeBook(b)
-	return book, errs.Wrap(err, "")
+	return book, errs.Wrap(err)
 }
 
 //LookupBookCardRaw gets book card info (HTML page data)
 func (c *Client) LookupBookCardRaw(id int) ([]byte, error) {
 	b, err := c.get(c.makeCardCommand(id))
-	return b, errs.Wrap(err, "")
+	return b, errs.Wrap(err)
 }
 
 //LookupBookContentRaw gets book content (plain or HTML formatted text data)
 func (c *Client) LookupBookContentRaw(id int, f Format) ([]byte, error) {
 	b, err := c.get(c.makeContentCommand(id, f))
-	return b, errs.Wrap(err, "")
+	return b, errs.Wrap(err)
 }
 
 //LookupPersonRaw gets person data (raw data)
 func (c *Client) LookupPersonRaw(id int) ([]byte, error) {
 	b, err := c.get(c.makeLookupCommand(TargetPersons, id))
-	return b, errs.Wrap(err, "")
+	return b, errs.Wrap(err)
 }
 
 //LookupPerson gets person data (struct data)
 func (c *Client) LookupPerson(id int) (*Person, error) {
 	b, err := c.LookupPersonRaw(id)
 	if err != nil {
-		return nil, errs.Wrap(err, "")
+		return nil, errs.Wrap(err)
 	}
 	person, err := DecodePerson(b)
-	return person, errs.Wrap(err, "")
+	return person, errs.Wrap(err)
 }
 
 //LookupWorker gets worker data (raw data)
 func (c *Client) LookupWorkerRaw(id int) ([]byte, error) {
 	b, err := c.get(c.makeLookupCommand(TargetWorkers, id))
-	return b, errs.Wrap(err, "")
+	return b, errs.Wrap(err)
 }
 
 //LookupWorkerRaw gets worker data (struct data)
 func (c *Client) LookupWorker(id int) (*Worker, error) {
 	b, err := c.LookupWorkerRaw(id)
 	if err != nil {
-		return nil, errs.Wrap(err, "")
+		return nil, errs.Wrap(err)
 	}
 	worker, err := DecodeWorker(b)
-	return worker, errs.Wrap(err, "")
+	return worker, errs.Wrap(err)
 }
 
 //RankingRaw gets ranking data (raw data)
 func (c *Client) RankingRaw(tm time.Time) ([]byte, error) {
 	b, err := c.get(c.makeRankingCommand(tm))
-	return b, errs.Wrap(err, "")
+	return b, errs.Wrap(err)
 }
 
 //Ranking gets ranking data (struct data)
 func (c *Client) Ranking(tm time.Time) (Ranking, error) {
 	b, err := c.RankingRaw(tm)
 	if err != nil {
-		return nil, errs.Wrap(err, "")
+		return nil, errs.Wrap(err)
 	}
 	ranking, err := DecodeRanking(b)
-	return ranking, errs.Wrap(err, "")
+	return ranking, errs.Wrap(err)
 }
 
 func (c *Client) makeSearchCommand(t Target, v url.Values) *url.URL {
@@ -279,25 +279,25 @@ func (c *Client) apiDir() string {
 func (c *Client) get(u *url.URL) ([]byte, error) {
 	req, err := http.NewRequestWithContext(c.ctx, "GET", u.String(), nil)
 	if err != nil {
-		return nil, errs.Wrap(err, "", errs.WithContext("url", u.String()))
+		return nil, errs.Wrap(err, errs.WithContext("url", u.String()))
 	}
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, errs.Wrap(err, "", errs.WithContext("url", u.String()))
+		return nil, errs.Wrap(err, errs.WithContext("url", u.String()))
 	}
 	defer resp.Body.Close()
 
 	if !(resp.StatusCode != 0 && resp.StatusCode < http.StatusBadRequest) {
-		return nil, errs.Wrap(ErrHTTPStatus, "", errs.WithContext("url", u.String()), errs.WithContext("status", resp.Status))
+		return nil, errs.Wrap(ErrHTTPStatus, errs.WithContext("url", u.String()), errs.WithContext("status", resp.Status))
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return body, errs.Wrap(err, "", errs.WithContext("url", u.String()))
+		return body, errs.Wrap(err, errs.WithContext("url", u.String()))
 	}
 	return body, nil
 }
 
-/* Copyright 2019 Spiegel
+/* Copyright 2019,2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

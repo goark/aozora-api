@@ -18,11 +18,11 @@ func newLookupPersonCmd(ui *rwi.RWI) *cobra.Command {
 		Long:  "Lookup author data in Aozora-bunko",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
-				return errs.Wrap(os.ErrInvalid, "person id")
+				return errs.New("person id", errs.WithCause(os.ErrInvalid))
 			}
 			id, err := strconv.Atoi(args[0])
 			if err != nil {
-				return errs.Wrap(err, "invalid person id")
+				return errs.New("invalid person id", errs.WithCause(err))
 			}
 
 			if rawFlag {
@@ -48,7 +48,7 @@ func newLookupPersonCmd(ui *rwi.RWI) *cobra.Command {
 	return lookupPersonCmd
 }
 
-/* Copyright 2019 Spiegel
+/* Copyright 2019,2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
