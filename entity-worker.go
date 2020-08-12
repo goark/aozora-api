@@ -24,7 +24,7 @@ func (worker *Worker) String() string {
 func DecodeWorker(b []byte) (*Worker, error) {
 	worker := Worker{}
 	if err := json.NewDecoder(bytes.NewReader(b)).Decode(&worker); err != nil {
-		return &worker, errs.Wrap(err, "error in DecodeWorker() function")
+		return &worker, errs.New("error in DecodeWorker() function", errs.WithCause(err))
 	}
 	return &worker, nil
 }
@@ -33,7 +33,7 @@ func DecodeWorker(b []byte) (*Worker, error) {
 func DecodeWorkers(b []byte) ([]Worker, error) {
 	workers := []Worker{}
 	if err := json.NewDecoder(bytes.NewReader(b)).Decode(&workers); err != nil {
-		return workers, errs.Wrap(err, "error in DecodeWorkers() function")
+		return workers, errs.New("error in DecodeWorkers() function", errs.WithCause(err))
 	}
 	return workers, nil
 }
@@ -48,7 +48,7 @@ func EncodeWorkers(workers []Worker) ([]byte, error) {
 	return json.Marshal(workers)
 }
 
-/* Copyright 2019 Spiegel
+/* Copyright 2019,2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

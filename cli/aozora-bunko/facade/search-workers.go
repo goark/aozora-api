@@ -18,7 +18,7 @@ func newSearchWorkersCmd(ui *rwi.RWI) *cobra.Command {
 			//title option
 			name, err := cmd.Flags().GetString("name")
 			if err != nil {
-				return errs.Wrap(err, "--name")
+				return errs.New("--name", errs.WithCause(err))
 			}
 
 			if rawFlag {
@@ -38,7 +38,7 @@ func newSearchWorkersCmd(ui *rwi.RWI) *cobra.Command {
 				return debugPrint(ui, err)
 			}
 			if len(workers) == 0 {
-				return debugPrint(ui, errs.Wrap(ecode.ErrNoData, "error in search workers"))
+				return debugPrint(ui, errs.New("error in search workers", errs.WithCause(ecode.ErrNoData)))
 			}
 			b, err := aozora.EncodeWorkers(workers)
 			if err != nil {
@@ -53,7 +53,7 @@ func newSearchWorkersCmd(ui *rwi.RWI) *cobra.Command {
 	return searchWorkersCmd
 }
 
-/* Copyright 2019 Spiegel
+/* Copyright 2019,2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

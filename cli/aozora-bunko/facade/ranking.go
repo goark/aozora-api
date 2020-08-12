@@ -19,11 +19,11 @@ func newRankingCmd(ui *rwi.RWI) *cobra.Command {
 		Long:  "Lookup ranking data in Aozora-bunko",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
-				return errs.Wrap(os.ErrInvalid, "year-month")
+				return errs.New("year-month", errs.WithCause(os.ErrInvalid))
 			}
 			tm, err := time.Parse("2006-01", args[0])
 			if err != nil {
-				return errs.Wrap(err, fmt.Sprintf("argument: %v", args[0]))
+				return errs.New(fmt.Sprintf("argument: %v", args[0]), errs.WithCause(err))
 			}
 
 			if rawFlag {
@@ -49,7 +49,7 @@ func newRankingCmd(ui *rwi.RWI) *cobra.Command {
 	return rankingCmd
 }
 
-/* Copyright 2019 Spiegel
+/* Copyright 2019,2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -73,7 +73,7 @@ func (book *Book) String() string {
 func DecodeBook(b []byte) (*Book, error) {
 	book := Book{}
 	if err := json.NewDecoder(bytes.NewReader(b)).Decode(&book); err != nil {
-		return &book, errs.Wrap(err, "")
+		return &book, errs.Wrap(err)
 	}
 	return &book, nil
 }
@@ -82,7 +82,7 @@ func DecodeBook(b []byte) (*Book, error) {
 func DecodeBooks(b []byte) ([]Book, error) {
 	books := []Book{}
 	if err := json.NewDecoder(bytes.NewReader(b)).Decode(&books); err != nil {
-		return books, errs.Wrap(err, "")
+		return books, errs.Wrap(err)
 	}
 	return books, nil
 }
@@ -97,7 +97,7 @@ func EncodeBooks(books []Book) ([]byte, error) {
 	return json.Marshal(books)
 }
 
-/* Copyright 2019 Spiegel
+/* Copyright 2019,2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -18,12 +18,12 @@ func newSearchBooksCmd(ui *rwi.RWI) *cobra.Command {
 			//title option
 			title, err := cmd.Flags().GetString("title")
 			if err != nil {
-				return debugPrint(ui, errs.Wrap(err, "--title"))
+				return debugPrint(ui, errs.New("--title", errs.WithCause(err)))
 			}
 			//author option
 			author, err := cmd.Flags().GetString("author")
 			if err != nil {
-				return debugPrint(ui, errs.Wrap(err, "--author"))
+				return debugPrint(ui, errs.New("--author", errs.WithCause(err)))
 			}
 
 			if rawFlag {
@@ -45,7 +45,7 @@ func newSearchBooksCmd(ui *rwi.RWI) *cobra.Command {
 				return debugPrint(ui, err)
 			}
 			if len(books) == 0 {
-				return debugPrint(ui, errs.Wrap(ecode.ErrNoData, "error in search books"))
+				return debugPrint(ui, errs.New("error in search books", errs.WithCause(ecode.ErrNoData)))
 			}
 			b, err := aozora.EncodeBooks(books)
 			if err != nil {
@@ -61,7 +61,7 @@ func newSearchBooksCmd(ui *rwi.RWI) *cobra.Command {
 	return searchBooksCmd
 }
 
-/* Copyright 2019 Spiegel
+/* Copyright 2019,2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

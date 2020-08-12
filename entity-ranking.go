@@ -26,7 +26,7 @@ func (ranking Ranking) String() string {
 func DecodeRanking(b []byte) (Ranking, error) {
 	ranking := Ranking{}
 	if err := json.NewDecoder(bytes.NewReader(b)).Decode(&ranking); err != nil {
-		return ranking, errs.Wrap(err, "error in DecodeRanking() function")
+		return ranking, errs.New("error in DecodeRanking() function", errs.WithCause(err))
 	}
 	return ranking, nil
 }
@@ -36,7 +36,7 @@ func EncodeRanking(ranking Ranking) ([]byte, error) {
 	return json.Marshal(ranking)
 }
 
-/* Copyright 2019 Spiegel
+/* Copyright 2019,2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

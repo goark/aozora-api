@@ -54,21 +54,21 @@ func newLookupBookCmd(ui *rwi.RWI) *cobra.Command {
 			//content-type option
 			c, err := cmd.Flags().GetString("content-type")
 			if err != nil {
-				return errs.Wrap(err, "--content-type")
+				return errs.New("--content-type", errs.WithCause(err))
 			}
 			content := TypeUnknown
 			if len(c) > 0 {
 				content = NewContent(c)
 				if content == TypeUnknown {
-					return errs.Wrap(os.ErrInvalid, fmt.Sprintf("content-type %v", c))
+					return errs.New(fmt.Sprintf("content-type %v", c), errs.WithCause(os.ErrInvalid))
 				}
 			}
 			if len(args) == 0 {
-				return errs.Wrap(os.ErrInvalid, "book id")
+				return errs.New("book id", errs.WithCause(os.ErrInvalid))
 			}
 			id, err := strconv.Atoi(args[0])
 			if err != nil {
-				return errs.Wrap(err, "invalid book id")
+				return errs.New("invalid book id", errs.WithCause(err))
 			}
 
 			client := aozora.DefaultClient()
@@ -117,7 +117,7 @@ func newLookupBookCmd(ui *rwi.RWI) *cobra.Command {
 	return lookupBookCmd
 }
 
-/* Copyright 2019 Spiegel
+/* Copyright 2019,2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

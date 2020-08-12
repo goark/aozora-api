@@ -34,7 +34,7 @@ func (person *Person) String() string {
 func DecodePerson(b []byte) (*Person, error) {
 	person := Person{}
 	if err := json.NewDecoder(bytes.NewReader(b)).Decode(&person); err != nil {
-		return &person, errs.Wrap(err, "error in DecodePerson() function")
+		return &person, errs.New("error in DecodePerson() function", errs.WithCause(err))
 	}
 	return &person, nil
 }
@@ -43,7 +43,7 @@ func DecodePerson(b []byte) (*Person, error) {
 func DecodePersons(b []byte) ([]Person, error) {
 	persons := []Person{}
 	if err := json.NewDecoder(bytes.NewReader(b)).Decode(&persons); err != nil {
-		return persons, errs.Wrap(err, "error in DecodeBooks() function")
+		return persons, errs.New("error in DecodeBooks() function", errs.WithCause(err))
 	}
 	return persons, nil
 }
@@ -58,7 +58,7 @@ func EncodePersons(persons []Person) ([]byte, error) {
 	return json.Marshal(persons)
 }
 
-/* Copyright 2019 Spiegel
+/* Copyright 2019,2020 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
