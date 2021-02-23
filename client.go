@@ -3,7 +3,7 @@ package aozora
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -290,14 +290,14 @@ func (c *Client) get(u *url.URL) ([]byte, error) {
 	if !(resp.StatusCode != 0 && resp.StatusCode < http.StatusBadRequest) {
 		return nil, errs.Wrap(ErrHTTPStatus, errs.WithContext("url", u.String()), errs.WithContext("status", resp.Status))
 	}
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return body, errs.Wrap(err, errs.WithContext("url", u.String()))
 	}
 	return body, nil
 }
 
-/* Copyright 2019,2020 Spiegel
+/* Copyright 2019-2021 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
