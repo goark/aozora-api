@@ -3,50 +3,56 @@ package aozora
 import (
 	"context"
 	"fmt"
-	"io"
-	"net/http"
 	"net/url"
 	"strconv"
 	"time"
 
 	"github.com/spiegel-im-spiegel/errs"
+	"github.com/spiegel-im-spiegel/fetch"
 )
 
 const (
 	defaultAPIDir = "api/v0.1"
 )
 
-//Client is http.Client for Aozora API Server
+//Client is http.Client for Aozora API Server.
 type Client struct {
 	server *Server
-	client *http.Client
-	ctx    context.Context
+	client fetch.Client
 }
 
-//SearchBooksParamsFunc is self-referential function for functional options pattern
+//SearchBooksParamsFunc is self-referential function for functional options pattern.
 type SearchBooksParamsFunc func(url.Values)
 
-//SearchBooksRaw gets list of books (raw data)
+//SearchBooksRaw gets list of books. (raw data)
 func (c *Client) SearchBooksRaw(opts ...SearchBooksParamsFunc) ([]byte, error) {
+	return c.SearchBooksRawContext(context.Background(), opts...)
+}
+
+//SearchBooks gets list of books. (struct data)
+func (c *Client) SearchBooks(opts ...SearchBooksParamsFunc) ([]Book, error) {
+	return c.SearchBooksContext(context.Background(), opts...)
+}
+
+//SearchBooksRawContext gets list of books with context.Context. (raw data)
+func (c *Client) SearchBooksRawContext(ctx context.Context, opts ...SearchBooksParamsFunc) ([]byte, error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(params)
 	}
-	b, err := c.get(c.makeSearchCommand(TargetBooks, params))
-	return b, errs.Wrap(err)
+	return c.get(ctx, c.makeSearchCommand(TargetBooks, params))
 }
 
-//SearchBooks gets list of books (struct data)
-func (c *Client) SearchBooks(opts ...SearchBooksParamsFunc) ([]Book, error) {
-	b, err := c.SearchBooksRaw(opts...)
+//SearchBooksContext gets list of books with context.Context. (struct data)
+func (c *Client) SearchBooksContext(ctx context.Context, opts ...SearchBooksParamsFunc) ([]Book, error) {
+	b, err := c.SearchBooksRawContext(ctx, opts...)
 	if err != nil {
 		return nil, errs.Wrap(err)
 	}
-	books, err := DecodeBooks(b)
-	return books, errs.Wrap(err)
+	return DecodeBooks(b)
 }
 
-//WithBookTitle returns function for setting Marketplace
+//WithBookTitle returns function for setting Marketplace.
 func WithBookTitle(title string) SearchBooksParamsFunc {
 	return func(params url.Values) {
 		if params != nil && len(title) > 0 {
@@ -55,7 +61,7 @@ func WithBookTitle(title string) SearchBooksParamsFunc {
 	}
 }
 
-//WithBookAuthor returns function for setting Marketplace
+//WithBookAuthor returns function for setting Marketplace.
 func WithBookAuthor(author string) SearchBooksParamsFunc {
 	return func(params url.Values) {
 		if params != nil && len(author) > 0 {
@@ -64,7 +70,7 @@ func WithBookAuthor(author string) SearchBooksParamsFunc {
 	}
 }
 
-//WithBookFields returns function for setting Marketplace
+//WithBookFields returns function for setting Marketplace.
 func WithBookFields(fields string) SearchBooksParamsFunc {
 	return func(params url.Values) {
 		if params != nil && len(fields) > 0 {
@@ -73,7 +79,7 @@ func WithBookFields(fields string) SearchBooksParamsFunc {
 	}
 }
 
-//WithBookLimit returns function for setting Marketplace
+//WithBookLimit returns function for setting Marketplace.
 func WithBookLimit(limit int) SearchBooksParamsFunc {
 	return func(params url.Values) {
 		if params != nil && limit > 0 {
@@ -82,7 +88,7 @@ func WithBookLimit(limit int) SearchBooksParamsFunc {
 	}
 }
 
-//WithBookSkip returns function for setting Marketplace
+//WithBookSkip returns function for setting Marketplace.
 func WithBookSkip(skip int) SearchBooksParamsFunc {
 	return func(params url.Values) {
 		if params != nil && skip > 0 {
@@ -91,7 +97,7 @@ func WithBookSkip(skip int) SearchBooksParamsFunc {
 	}
 }
 
-//WithBookAfter returns function for setting Marketplace
+//WithBookAfter returns function for setting Marketplace.
 func WithBookAfter(after time.Time) SearchBooksParamsFunc {
 	return func(params url.Values) {
 		if params != nil && !after.IsZero() {
@@ -100,30 +106,38 @@ func WithBookAfter(after time.Time) SearchBooksParamsFunc {
 	}
 }
 
-//SearchPersonsParamsFunc is self-referential function for functional options pattern
+//SearchPersonsParamsFunc is self-referential function for functional options pattern.
 type SearchPersonsParamsFunc func(url.Values)
 
-//SearchPersonsRaw gets list of persons (raw data)
+//SearchPersonsRaw gets list of persons. (raw data)
 func (c *Client) SearchPersonsRaw(opts ...SearchPersonsParamsFunc) ([]byte, error) {
+	return c.SearchPersonsRawContext(context.Background(), opts...)
+}
+
+//SearchPersons gets list of persons. (struct data)
+func (c *Client) SearchPersons(opts ...SearchPersonsParamsFunc) ([]Person, error) {
+	return c.SearchPersonsContext(context.Background(), opts...)
+}
+
+//SearchPersonsRawContext gets list of persons with context.Context. (raw data)
+func (c *Client) SearchPersonsRawContext(ctx context.Context, opts ...SearchPersonsParamsFunc) ([]byte, error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(params)
 	}
-	b, err := c.get(c.makeSearchCommand(TargetPersons, params))
-	return b, errs.Wrap(err)
+	return c.get(ctx, c.makeSearchCommand(TargetPersons, params))
 }
 
-//SearchPersons gets list of persons (struct data)
-func (c *Client) SearchPersons(opts ...SearchPersonsParamsFunc) ([]Person, error) {
-	b, err := c.SearchPersonsRaw(opts...)
+//SearchPersonsContext gets list of persons with context.Context. (struct data)
+func (c *Client) SearchPersonsContext(ctx context.Context, opts ...SearchPersonsParamsFunc) ([]Person, error) {
+	b, err := c.SearchPersonsRawContext(ctx, opts...)
 	if err != nil {
 		return nil, errs.Wrap(err)
 	}
-	persons, err := DecodePersons(b)
-	return persons, errs.Wrap(err)
+	return DecodePersons(b)
 }
 
-//WithPersonName returns function for setting Marketplace
+//WithPersonName returns function for setting Marketplace.
 func WithPersonName(name string) SearchPersonsParamsFunc {
 	return func(params url.Values) {
 		if params != nil && len(name) > 0 {
@@ -132,30 +146,38 @@ func WithPersonName(name string) SearchPersonsParamsFunc {
 	}
 }
 
-//SearchPersonsParamsFunc is self-referential function for functional options pattern
+//SearchPersonsParamsFunc is self-referential function for functional options pattern.
 type SearchWorkersParamsFunc func(url.Values)
 
 //SearchWorkersRaw gets list of workers (raw data)
 func (c *Client) SearchWorkersRaw(opts ...SearchWorkersParamsFunc) ([]byte, error) {
-	params := url.Values{}
-	for _, opt := range opts {
-		opt(params)
-	}
-	b, err := c.get(c.makeSearchCommand(TargetWorkers, params))
-	return b, errs.Wrap(err)
+	return c.SearchWorkersRawContext(context.Background(), opts...)
 }
 
 //SearchWorkers gets list of workers (struct data)
 func (c *Client) SearchWorkers(opts ...SearchWorkersParamsFunc) ([]Worker, error) {
-	b, err := c.SearchWorkersRaw(opts...)
+	return c.SearchWorkersContext(context.Background(), opts...)
+}
+
+//SearchWorkersRawContext gets list of workers with context.Context. (raw data)
+func (c *Client) SearchWorkersRawContext(ctx context.Context, opts ...SearchWorkersParamsFunc) ([]byte, error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(params)
+	}
+	return c.get(ctx, c.makeSearchCommand(TargetWorkers, params))
+}
+
+//SearchWorkersContext gets list of workers with context.Context. (struct data)
+func (c *Client) SearchWorkersContext(ctx context.Context, opts ...SearchWorkersParamsFunc) ([]Worker, error) {
+	b, err := c.SearchWorkersRawContext(ctx, opts...)
 	if err != nil {
 		return nil, errs.Wrap(err)
 	}
-	workers, err := DecodeWorkers(b)
-	return workers, errs.Wrap(err)
+	return DecodeWorkers(b)
 }
 
-//WithWorkerName returns function for setting Marketplace
+//WithWorkerName returns function for setting Marketplace.
 func WithWorkerName(name string) SearchWorkersParamsFunc {
 	return func(params url.Values) {
 		if params != nil && len(name) > 0 {
@@ -164,91 +186,141 @@ func WithWorkerName(name string) SearchWorkersParamsFunc {
 	}
 }
 
-//LookupBookRaw gets book data (raw data)
+//LookupBookRaw gets book data. (raw data)
 func (c *Client) LookupBookRaw(id int) ([]byte, error) {
-	b, err := c.get(c.makeLookupCommand(TargetBooks, id))
-	return b, errs.Wrap(err)
+	return c.LookupBookRawContext(context.Background(), id)
 }
 
-//LookupBook gets books data (struct data)
+//LookupBook gets books data. (struct data)
 func (c *Client) LookupBook(id int) (*Book, error) {
-	b, err := c.LookupBookRaw(id)
-	if err != nil {
-		return nil, errs.Wrap(err)
-	}
-	book, err := DecodeBook(b)
-	return book, errs.Wrap(err)
+	return c.LookupBookContext(context.Background(), id)
 }
 
 //LookupBookCardRaw gets book card info (HTML page data)
 func (c *Client) LookupBookCardRaw(id int) ([]byte, error) {
-	b, err := c.get(c.makeCardCommand(id))
-	return b, errs.Wrap(err)
+	return c.LookupBookCardRawContext(context.Background(), id)
 }
 
 //LookupBookContentRaw gets book content (plain or HTML formatted text data)
 func (c *Client) LookupBookContentRaw(id int, f Format) ([]byte, error) {
-	b, err := c.get(c.makeContentCommand(id, f))
-	return b, errs.Wrap(err)
+	return c.LookupBookContentRawContext(context.Background(), id, f)
 }
 
-//LookupPersonRaw gets person data (raw data)
+//LookupBookRawContext gets book data with context.Context. (raw data)
+func (c *Client) LookupBookRawContext(ctx context.Context, id int) ([]byte, error) {
+	return c.get(ctx, c.makeLookupCommand(TargetBooks, id))
+}
+
+//LookupBookContext gets books data with context.Context. (struct data)
+func (c *Client) LookupBookContext(ctx context.Context, id int) (*Book, error) {
+	b, err := c.LookupBookRawContext(ctx, id)
+	if err != nil {
+		return nil, errs.Wrap(err)
+	}
+	return DecodeBook(b)
+}
+
+//LookupBookCardRawContext gets book card info with context.Context. (HTML page data)
+func (c *Client) LookupBookCardRawContext(ctx context.Context, id int) ([]byte, error) {
+	return c.get(ctx, c.makeCardCommand(id))
+}
+
+//LookupBookContentRawContext gets book content with context.Context. (plain or HTML formatted text data)
+func (c *Client) LookupBookContentRawContext(ctx context.Context, id int, f Format) ([]byte, error) {
+	return c.get(ctx, c.makeContentCommand(id, f))
+}
+
+//LookupPersonRaw gets person data. (raw data)
 func (c *Client) LookupPersonRaw(id int) ([]byte, error) {
-	b, err := c.get(c.makeLookupCommand(TargetPersons, id))
-	return b, errs.Wrap(err)
+	return c.LookupPersonRawContext(context.Background(), id)
 }
 
-//LookupPerson gets person data (struct data)
+//LookupPerson gets person data. (struct data)
 func (c *Client) LookupPerson(id int) (*Person, error) {
-	b, err := c.LookupPersonRaw(id)
+	return c.LookupPersonContext(context.Background(), id)
+}
+
+//LookupPersonRawContext gets person data with context.Context. (raw data)
+func (c *Client) LookupPersonRawContext(ctx context.Context, id int) ([]byte, error) {
+	return c.get(ctx, c.makeLookupCommand(TargetPersons, id))
+}
+
+//LookupPersonContext gets person data with context.Context. (struct data)
+func (c *Client) LookupPersonContext(ctx context.Context, id int) (*Person, error) {
+	b, err := c.LookupPersonRawContext(ctx, id)
 	if err != nil {
 		return nil, errs.Wrap(err)
 	}
-	person, err := DecodePerson(b)
-	return person, errs.Wrap(err)
+	return DecodePerson(b)
 }
 
-//LookupWorker gets worker data (raw data)
+//LookupWorkerRaw gets worker data. (raw data)
 func (c *Client) LookupWorkerRaw(id int) ([]byte, error) {
-	b, err := c.get(c.makeLookupCommand(TargetWorkers, id))
-	return b, errs.Wrap(err)
+	return c.LookupWorkerRawContext(context.Background(), id)
 }
 
-//LookupWorkerRaw gets worker data (struct data)
+//LookupWorker gets worker data. (struct data)
 func (c *Client) LookupWorker(id int) (*Worker, error) {
-	b, err := c.LookupWorkerRaw(id)
+	return c.LookupWorkerContext(context.Background(), id)
+}
+
+//LookupWorkerRawContext gets worker data with context.Context. (raw data)
+func (c *Client) LookupWorkerRawContext(ctx context.Context, id int) ([]byte, error) {
+	return c.get(ctx, c.makeLookupCommand(TargetWorkers, id))
+}
+
+//LookupWorkerContext gets worker data with context.Context. (struct data)
+func (c *Client) LookupWorkerContext(ctx context.Context, id int) (*Worker, error) {
+	b, err := c.LookupWorkerRawContext(ctx, id)
 	if err != nil {
 		return nil, errs.Wrap(err)
 	}
-	worker, err := DecodeWorker(b)
-	return worker, errs.Wrap(err)
+	return DecodeWorker(b)
 }
 
 //RankingRaw gets ranking data (raw data)
 func (c *Client) RankingRaw(tm time.Time) ([]byte, error) {
-	b, err := c.get(c.makeRankingCommand(tm))
-	return b, errs.Wrap(err)
+	return c.RankingRawContext(context.Background(), tm)
 }
 
 //Ranking gets ranking data (struct data)
 func (c *Client) Ranking(tm time.Time) (Ranking, error) {
-	b, err := c.RankingRaw(tm)
+	return c.RankingContext(context.Background(), tm)
+}
+
+//RankingRawContext gets ranking data (raw data)
+func (c *Client) RankingRawContext(ctx context.Context, tm time.Time) ([]byte, error) {
+	return c.get(ctx, c.makeRankingCommand(tm))
+}
+
+//RankingContext gets ranking data (struct data)
+func (c *Client) RankingContext(ctx context.Context, tm time.Time) (Ranking, error) {
+	b, err := c.RankingRawContext(ctx, tm)
 	if err != nil {
 		return nil, errs.Wrap(err)
 	}
-	ranking, err := DecodeRanking(b)
-	return ranking, errs.Wrap(err)
+	return DecodeRanking(b)
 }
 
 func (c *Client) makeSearchCommand(t Target, v url.Values) *url.URL {
-	u := c.server.URL()
+	var u *url.URL
+	if c == nil {
+		u = New().URL()
+	} else {
+		u = c.server.URL()
+	}
 	u.Path = fmt.Sprintf("/%v/%v", c.apiDir(), t)
 	u.RawQuery = v.Encode()
 	return u
 }
 
 func (c *Client) makeLookupCommand(t Target, id int) *url.URL {
-	u := c.server.URL()
+	var u *url.URL
+	if c == nil {
+		u = New().URL()
+	} else {
+		u = c.server.URL()
+	}
 	u.Path = fmt.Sprintf("/%v/%v/%v", c.apiDir(), t, strconv.Itoa(id))
 	return u
 }
@@ -267,7 +339,12 @@ func (c *Client) makeContentCommand(id int, f Format) *url.URL {
 }
 
 func (c *Client) makeRankingCommand(tm time.Time) *url.URL {
-	u := c.server.URL()
+	var u *url.URL
+	if c == nil {
+		u = New().URL()
+	} else {
+		u = c.server.URL()
+	}
 	u.Path = fmt.Sprintf("/%v/%v/%v/%v", c.apiDir(), TargetRanking, "xhtml", tm.Format("2006/01"))
 	return u
 }
@@ -276,25 +353,15 @@ func (c *Client) apiDir() string {
 	return defaultAPIDir
 }
 
-func (c *Client) get(u *url.URL) ([]byte, error) {
-	req, err := http.NewRequestWithContext(c.ctx, "GET", u.String(), nil)
+func (c *Client) get(ctx context.Context, u *url.URL) ([]byte, error) {
+	if c == nil {
+		return nil, errs.Wrap(ErrNullPointer)
+	}
+	resp, err := c.client.Get(u, fetch.WithContext(ctx))
 	if err != nil {
 		return nil, errs.Wrap(err, errs.WithContext("url", u.String()))
 	}
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, errs.Wrap(err, errs.WithContext("url", u.String()))
-	}
-	defer resp.Body.Close()
-
-	if !(resp.StatusCode != 0 && resp.StatusCode < http.StatusBadRequest) {
-		return nil, errs.Wrap(ErrHTTPStatus, errs.WithContext("url", u.String()), errs.WithContext("status", resp.Status))
-	}
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return body, errs.Wrap(err, errs.WithContext("url", u.String()))
-	}
-	return body, nil
+	return resp.DumpBodyAndClose()
 }
 
 /* Copyright 2019-2021 Spiegel
