@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+
+	"github.com/spiegel-im-spiegel/fetch"
 )
 
 const (
@@ -63,37 +65,26 @@ func (s *Server) CreateClient(opts ...ClientOptFunc) *Client {
 	if s == nil {
 		s = New()
 	}
-	cli := &Client{
-		server: s,
-		client: nil,
-		ctx:    nil,
-	}
+	cli := &Client{server: s}
 	for _, opt := range opts {
 		opt(cli)
 	}
 	if cli.client == nil {
-		cli.client = http.DefaultClient
-	}
-	if cli.ctx == nil {
-		cli.ctx = context.Background()
+		cli.client = fetch.New()
 	}
 	return cli
 }
 
-//WithContext returns function for setting context.Context
+//WithContext is dummy function. Because this function is deprecated.
 func WithContext(ctx context.Context) ClientOptFunc {
-	return func(c *Client) {
-		if c != nil {
-			c.ctx = ctx
-		}
-	}
+	return func(c *Client) {}
 }
 
 //WithHttpClient returns function for setting http.Client
 func WithHttpClient(client *http.Client) ClientOptFunc {
 	return func(c *Client) {
 		if c != nil {
-			c.client = client
+			c.client = fetch.New(fetch.WithHTTPClient(client))
 		}
 	}
 }
@@ -103,7 +94,7 @@ func DefaultClient() *Client {
 	return New().CreateClient()
 }
 
-/* Copyright 2019 Spiegel
+/* Copyright 2019-2021 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -11,13 +11,13 @@ This package is required Go 1.16 or later.
 
 ### Import Package
 
-```
+```go
 import "github.com/spiegel-im-spiegel/aozora-api"
 ```
 
 ### Search for Aozora-bunko Books Data
 
-```
+```go
 books, err := aozora.DefaultClient().SearchBooks(
     aozora.WithBookTitle("/天に積む宝/"),
     aozora.WithBookAuthor("富田倫生"),
@@ -26,13 +26,13 @@ books, err := aozora.DefaultClient().SearchBooks(
 
 ### Lookup Aozora-bunko Book Data
 
-```
+```go
 book, err := aozora.DefaultClient().LookupBook(59489)
 ```
 
 ### Search for Aozora-bunko Persons Data
 
-```
+```go
 persons, err := aozora.DefaultClient().SearchPersons(
     aozora.WithPersonName("富田倫生"),
 )
@@ -40,13 +40,13 @@ persons, err := aozora.DefaultClient().SearchPersons(
 
 ### Lookup Aozora-bunko Person Data
 
-```
+```go
 person, err := aozora.DefaultClient().LookupPerson(55)
 ```
 
 ### Search for Aozora-bunko Workers Data
 
-```
+```go
 workers, err := aozora.DefaultClient().SearchWorkers(
     aozora.WithWorkerName("雪森"),
 )
@@ -54,13 +54,13 @@ workers, err := aozora.DefaultClient().SearchWorkers(
 
 ### Lookup Aozora-bunko Worker Data
 
-```
+```go
 worker, err := aozora.DefaultClient().LookupWorker(845)
 ```
 
 ### Lookup Ranking data of Aozora-bunko
 
-```
+```go
 tm, err := time.Parse("2006-01", "2019-01")
 ranking, err := aozora.DefaultClient().Ranking(tm)
 ```
@@ -69,7 +69,7 @@ ranking, err := aozora.DefaultClient().Ranking(tm)
 
 ### Book type
 
-```
+```go
 //Author is entity class of author and translator info.
 type Author struct {
     PersonID  int    `json:"person_id"`
@@ -128,7 +128,7 @@ type Book struct {
 
 ### Person type
 
-```
+```go
 //Person is entity class of person info.
 type Person struct {
     PersonID        int    `json:"person_id"`
@@ -148,7 +148,7 @@ type Person struct {
 
 ### Worker type
 
-```
+```go
 //Worker is entity class of worker info.
 type Worker struct {
     WorkerID int    `json:"id"`
@@ -158,7 +158,7 @@ type Worker struct {
 
 ### Ranking type
 
-```
+```go
 //Ranking is entity class of ranking info.
 type Ranking []struct {
     BookID  int      `json:"book_id"`
