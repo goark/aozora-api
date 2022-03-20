@@ -1,9 +1,9 @@
 package facade
 
 import (
+	"github.com/goark/aozora-api/cli/aozora-bunko/ecode"
+	"github.com/goark/gocli/rwi"
 	"github.com/spf13/cobra"
-	"github.com/spiegel-im-spiegel/aozora-api/cli/aozora-bunko/ecode"
-	"github.com/spiegel-im-spiegel/gocli/rwi"
 )
 
 //newLookupCmd returns cobra.Command instance for show sub-command

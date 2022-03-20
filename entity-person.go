@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"github.com/spiegel-im-spiegel/errs"
+	"github.com/goark/errs"
 )
 
 //Person is entity class of person info.

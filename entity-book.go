@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"github.com/spiegel-im-spiegel/errs"
+	"github.com/goark/errs"
 )
 
 //Author is entity class of author and translator info.

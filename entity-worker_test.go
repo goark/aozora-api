@@ -6,8 +6,8 @@ import (
 
 var inputWorkerJSON = `{"id":845,"name":"雪森"}`
 var inputWorkersJSON = "[" + inputWorkerJSON + "]"
-var respWorkerJSON = `{"id":845,"name":"雪森"}`
-var respWorkersJSON = "[" + respWorkerJSON + "]"
+var responseWorkerJSON = `{"id":845,"name":"雪森"}`
+var responseWorkersJSON = "[" + responseWorkerJSON + "]"
 
 func TestDecodeWorker(t *testing.T) {
 	worker, err := DecodeWorker([]byte(inputWorkerJSON))
@@ -16,8 +16,8 @@ func TestDecodeWorker(t *testing.T) {
 		return
 	}
 	str := worker.String()
-	if str != respWorkerJSON {
-		t.Errorf("EncodeWorker() = \"%v\", want \"%v\".", str, respWorkerJSON)
+	if str != responseWorkerJSON {
+		t.Errorf("EncodeWorker() = \"%v\", want \"%v\".", str, responseWorkerJSON)
 	}
 }
 
@@ -33,12 +33,12 @@ func TestDecodeWorkers(t *testing.T) {
 		return
 	}
 	str := string(b)
-	if str != respWorkersJSON {
-		t.Errorf("EncodeWorkers() = \"%v\", want \"%v\".", str, respWorkersJSON)
+	if str != responseWorkersJSON {
+		t.Errorf("EncodeWorkers() = \"%v\", want \"%v\".", str, responseWorkersJSON)
 	}
 }
 
-/* Copyright 2019 Spiegel
+/* Copyright 2019-2022 Spiegel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

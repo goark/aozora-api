@@ -1,12 +1,12 @@
-module github.com/spiegel-im-spiegel/aozora-api
+module github.com/goark/aozora-api
 
-go 1.17
+go 1.18
 
 require (
-	github.com/spf13/cobra v1.2.1
-	github.com/spiegel-im-spiegel/errs v1.0.5
-	github.com/spiegel-im-spiegel/fetch v0.2.5
-	github.com/spiegel-im-spiegel/gocli v0.10.5
+	github.com/goark/errs v1.1.0
+	github.com/goark/fetch v0.3.0
+	github.com/goark/gocli v0.12.0
+	github.com/spf13/cobra v1.4.0
 )
 
 require (

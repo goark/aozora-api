@@ -1,11 +1,11 @@
 package facade
 
 import (
+	"github.com/goark/aozora-api"
+	"github.com/goark/aozora-api/cli/aozora-bunko/ecode"
+	"github.com/goark/errs"
+	"github.com/goark/gocli/rwi"
 	"github.com/spf13/cobra"
-	"github.com/spiegel-im-spiegel/aozora-api"
-	"github.com/spiegel-im-spiegel/aozora-api/cli/aozora-bunko/ecode"
-	"github.com/spiegel-im-spiegel/errs"
-	"github.com/spiegel-im-spiegel/gocli/rwi"
 )
 
 //newSearchBooksCmd returns cobra.Command instance for show sub-command

@@ -1,18 +1,20 @@
 # [aozora-api] -- APIs for Aozora-bunko RESTful Service by Golang
 
-[![check vulns](https://github.com/spiegel-im-spiegel/aozora-api/workflows/vulns/badge.svg)](https://github.com/spiegel-im-spiegel/aozora-api/actions)
-[![lint status](https://github.com/spiegel-im-spiegel/aozora-api/workflows/lint/badge.svg)](https://github.com/spiegel-im-spiegel/aozora-api/actions)
-[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/spiegel-im-spiegel/aozora-api/master/LICENSE)
-[![GitHub release](https://img.shields.io/github/release/spiegel-im-spiegel/aozora-api.svg)](https://github.com/spiegel-im-spiegel/aozora-api/releases/latest)
+[![check vulns](https://github.com/goark/aozora-api/workflows/vulns/badge.svg)](https://github.com/goark/aozora-api/actions)
+[![lint status](https://github.com/goark/aozora-api/workflows/lint/badge.svg)](https://github.com/goark/aozora-api/actions)
+[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/goark/aozora-api/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/goark/aozora-api.svg)](https://github.com/goark/aozora-api/releases/latest)
 
 This package is required Go 1.16 or later.
+
+**Migrated repository to [github.com/goark/aozora-api][aozora-api]**
 
 ## Usage of package
 
 ### Import Package
 
 ```go
-import "github.com/spiegel-im-spiegel/aozora-api"
+import "github.com/goark/aozora-api"
 ```
 
 ### Search for Aozora-bunko Books Data
@@ -173,7 +175,7 @@ type Ranking []struct {
 ### Install and Build
 
 ```
-$ go get github.com/spiegel-im-spiegel/aozora-api/cli/aozora-bunko
+$ go get github.com/goark/aozora-api/cli/aozora-bunko
 ```
 
 ### Search for Aozora-bunko Books Data
@@ -223,4 +225,4 @@ $ aozora-bunko ranking 2019-01
 - [aozorahack/pubserver2: Pubserver](https://github.com/aozorahack/pubserver2)
 - [aozorahack/aozora-cli](https://github.com/aozorahack/aozora-cli) : CLI by Python
 
-[aozora-api]: https://github.com/spiegel-im-spiegel/aozora-api "spiegel-im-spiegel/aozora-api: APIs for Aozora-bunko RESTful Service by Golang"
+[aozora-api]: https://github.com/goark/aozora-api "goark/aozora-api: APIs for Aozora-bunko RESTful Service by Golang"
