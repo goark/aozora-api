@@ -4,10 +4,10 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/goark/aozora-api"
+	"github.com/goark/errs"
+	"github.com/goark/gocli/rwi"
 	"github.com/spf13/cobra"
-	"github.com/spiegel-im-spiegel/aozora-api"
-	"github.com/spiegel-im-spiegel/errs"
-	"github.com/spiegel-im-spiegel/gocli/rwi"
 )
 
 //newLookupPersonCmd returns cobra.Command instance for show sub-command

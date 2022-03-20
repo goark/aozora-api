@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/spiegel-im-spiegel/aozora-api/cli/aozora-bunko/facade"
-	"github.com/spiegel-im-spiegel/gocli/rwi"
+	"github.com/goark/aozora-api/cli/aozora-bunko/facade"
+	"github.com/goark/gocli/rwi"
 )
 
 //go:generate go-assets-builder -p report -s="/report/assets" -o report/assets.go report/assets/
